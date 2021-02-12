@@ -1,0 +1,13 @@
+@import './reset.scss', './props.scss';
+
+//@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700|Roboto:100,300,400');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,700');
+
+html,
+body {
+  font-family: 'Montserrat', sans-serif;
+  height: 100%;
+  margin: 0;
+  background: $bg-5;
+  color: $bg-9;
+}
