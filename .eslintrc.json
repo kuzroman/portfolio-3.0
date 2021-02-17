@@ -1,11 +1,21 @@
 {
   "ignorePatterns": ["dist", "node_modules"],
   "rules": {
-    git init    "max-len": [
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "state" // we should be able to change state in mutation store!
+        ]
+      }
+    ],
+    "import/no-unresolved": "off", // vuex catch error without it rule - Unable to resolve path to module 'vuex'
+    "max-len": [
       "error",
       {
         "ignoreUrls": true,
-        "code": 80
+        "code": 85
       }
     ],
     "prefer-template": "off",

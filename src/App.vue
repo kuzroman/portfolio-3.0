@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <MenuNavigation />
-    <MenuBurger :isActive="isActiveBurger" />
+    <MenuBurger />
 
     <div class="content">
       <transition name="fade">
@@ -14,13 +14,12 @@
 <script>
 import MenuNavigation from './components/MenuNavigation.vue'
 import MenuBurger from './components/MenuBurger.vue'
+
 export default {
   name: 'App',
   components: { MenuNavigation, MenuBurger },
   data() {
-    return {
-      isActiveBurger: false,
-    }
+    return {}
   },
 }
 </script>

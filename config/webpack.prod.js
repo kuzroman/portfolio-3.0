@@ -17,7 +17,10 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.(scss|css)$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+        use: [MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader'
+        ],
       },
     ],
   },
@@ -32,8 +35,9 @@ module.exports = merge(common, {
   optimization: {
     minimize: true,
     minimizer: [new CssMinimizerPlugin(), '...'],
-    // Once your build outputs multiple chunks, this option will ensure they share the webpack runtime
-    // instead of having their own. This also helps with long-term caching, since the chunks will only
+    // Once your build outputs multiple chunks, this option will ensure they share
+    // the webpack runtime instead of having their own. This also helps with
+    // long-term caching, since the chunks will only
     // change when actual code changes, not the webpack runtime.
     runtimeChunk: {
       name: 'runtime',
