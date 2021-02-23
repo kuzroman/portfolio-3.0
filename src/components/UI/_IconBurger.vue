@@ -3,7 +3,6 @@
     class="icon-burger"
     @mouseover="addActive"
     @mouseleave="removeActive"
-    @click="switchMenu"
     :class="{ active: isActive }"
   >
     <i></i>
@@ -13,44 +12,31 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
-
 export default {
-  name: 'iconBurger',
+  name: 'UI_IconBurger', // animation/_IconBurger
   props: {},
   data() {
     return {
-      isActive: this.isActive,
+      isActive: false,
     }
   },
-  computed: {
-    ...mapGetters(['isMenuNavigationOpened']),
-  },
+  computed: {},
   methods: {
-    ...mapMutations(['switchMenuNavigation']),
-
     addActive() {
       this.isActive = true
     },
     removeActive() {
       this.isActive = false
     },
-    switchMenu() {
-      this.switchMenuNavigation(!this.isMenuNavigationOpened)
-      // this.$emit('openNavigation')
-    },
   },
 }
 </script>
 
-<style lang="scss">
-@import '../styles/index.scss';
-
+<style lang="scss" scoped>
 .icon-burger {
   position: fixed;
   right: 50px;
   top: 40px;
-  z-index: $zIndex-2;
   cursor: pointer;
   padding: 5px 4px;
 

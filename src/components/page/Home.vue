@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <!--    <img src="https://loremflickr.com/640/360" alt="" />-->
+    <h1>Home</h1>
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias dolorum
       exercitationem fuga ipsam nesciunt quis ratione veritatis! Accusamus ad

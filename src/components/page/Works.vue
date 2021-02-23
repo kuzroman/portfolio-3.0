@@ -1,6 +1,7 @@
 <template>
   <div class="works">
     <!--    <img src="https://loremflickr.com/640/360" alt="" />-->
+    <h1>Works</h1>
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur cum
       eius eligendi eos id magni, obcaecati optio qui, sapiente sint sunt

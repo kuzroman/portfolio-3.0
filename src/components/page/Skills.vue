@@ -1,6 +1,7 @@
 <template>
   <div class="skills">
     <!--    <img src="https://loremflickr.com/640/360" alt="" />-->
+    <h1>Skills</h1>
     <p>
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur cum
       eius eligendi eos id magni, obcaecati optio qui, sapiente sint sunt
@@ -23,6 +24,6 @@ export default {
 .skills {
   width: 100%;
   height: 100%;
-  background: #42b983;
+  //background: #42b983;
 }
 </style>

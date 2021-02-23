@@ -1,17 +1,8 @@
 <template>
   <div class="menu" :class="{ active: isMenuNavigationOpened }">
     <nav>
-      <router-link to="/">
-        <span>about</span>
-      </router-link>
-      <router-link to="/work">
-        <span>work</span>
-      </router-link>
-      <router-link to="/skills">
-        <span>skills</span>
-      </router-link>
-      <router-link to="/contact">
-        <span>contact</span>
+      <router-link v-for="route in routes" :to="route.path" :key="route.name">
+        <span>{{ route.name }}</span>
       </router-link>
     </nav>
   </div>
@@ -25,6 +16,10 @@ export default {
   props: {},
   computed: {
     ...mapGetters(['isMenuNavigationOpened']),
+
+    routes() {
+      return this.$router.options.routes
+    },
   },
 }
 </script>

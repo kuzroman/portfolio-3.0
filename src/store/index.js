@@ -13,7 +13,7 @@ export default new Vuex.Store({
     isActiveBurger: (state) => state.isActiveBurger,
   },
   mutations: {
-    switchMenuNavigation(state, bool) {
+    setMenuNavigation(state, bool) {
       state.isMenuNavigationOpened = bool
     },
   },
