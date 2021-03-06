@@ -1,15 +1,15 @@
 <template>
   <div class="menu" :class="{ active: isMenuNavigationOpened }">
     <nav>
-      <router-link v-for="route in routes" :to="route.path" :key="route.name">
+      <a v-for="route in routes" :key="route.name" @click="toPage({ route })">
         <span>{{ route.name }}</span>
-      </router-link>
+      </a>
     </nav>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'MenuNavigation',
@@ -21,6 +21,9 @@ export default {
       return this.$router.options.routes
     },
   },
+  methods: {
+    ...mapMutations(['toPage']),
+  },
 }
 </script>
 
@@ -31,7 +34,7 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  z-index: $zIndex-2;
+  z-index: $zIndex-3;
   background: $bg-6;
   top: -100%;
   transition: top 0.4s;
@@ -60,6 +63,7 @@ export default {
       overflow: hidden;
       transition: color 0.4s;
       font-weight: bold;
+      cursor: pointer;
 
       &:hover {
         color: $color-2;

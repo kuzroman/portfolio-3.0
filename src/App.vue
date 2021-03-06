@@ -1,25 +1,22 @@
 <template>
   <div class="app">
+    <PageLoader />
     <MenuNavigation />
     <IconBurger />
 
     <div class="content">
       <div class="content-arrow">
-        <a @click="goToPage(prevRoute, 'to-left')">
+        <a @click="toPage({ route: prevRoute, direction: 'to-left' })">
           <PageControl direction="left" :text="prevRoute.name" />
         </a>
       </div>
 
-      <transition
-        name="fade"
-        @before-leave="beforeLeave"
-        @after-enter="afterEnter"
-      >
-        <router-view class="view" :class="transitionDirection"></router-view>
+      <transition name="fade">
+        <router-view class="view" :class="routeStyles"></router-view>
       </transition>
 
       <div class="content-arrow right">
-        <a @click="goToPage(nextRoute, 'to-right')">
+        <a @click="toPage({ route: nextRoute, direction: 'to-right' })">
           <PageControl direction="right" :text="nextRoute.name" />
         </a>
       </div>
@@ -28,51 +25,64 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+import PageLoader from './components/PageLoader.vue'
 import MenuNavigation from './components/MenuNavigation.vue'
 import IconBurger from './components/IconBurger.vue'
 import PageControl from './components/PageControl.vue'
 
 export default {
   name: 'App',
-  components: { IconBurger, MenuNavigation, PageControl },
+  components: { PageLoader, IconBurger, MenuNavigation, PageControl },
   data() {
-    return {
-      transitionDirection: 'prev',
-    }
+    return {}
   },
   methods: {
-    goToPage(route, direction) {
-      this.transitionDirection = direction
-      console.log(this.transitionDirection)
-      setTimeout(() => this.$router.push(route), 100)
-    },
-    beforeLeave() {
-      console.log('beforeLeave')
-    },
-    afterEnter() {
-      console.log('afterEnter')
-    },
+    ...mapMutations(['toPage', 'setIsSiteFirstLoaded']),
+
+    // pageLoaderGoDown() {
+    //   console.log('pageLoaderGoDown')
+    // },
   },
   computed: {
+    ...mapGetters(['transitionDirection', 'isSiteFirstLoaded']),
+
+    routes() {
+      return this.$router.options.routes
+    },
     routesLen() {
-      return this.$router.options.routes.length
+      return this.routes.length
+    },
+    routeStyles() {
+      let styles = []
+      styles.push(this.transitionDirection)
+      if (this.isSiteFirstLoaded) {
+        styles.push('first-loaded')
+      }
+      return styles
     },
     currentRouteIndex() {
-      return this.$router.options.routes.findIndex(
-        (x) => x.path === this.$route.path
-      )
+      return this.routes.findIndex((x) => x.path === this.$route.path)
     },
     prevRoute() {
       return this.currentRouteIndex === 0
-        ? this.$router.options.routes[this.routesLen - 1]
-        : this.$router.options.routes[this.currentRouteIndex - 1]
+        ? this.routes[this.routesLen - 1]
+        : this.routes[this.currentRouteIndex - 1]
     },
     nextRoute() {
       // console.log(111)
       return this.currentRouteIndex === this.routesLen - 1
-        ? this.$router.options.routes[0]
-        : this.$router.options.routes[this.currentRouteIndex + 1]
+        ? this.routes[0]
+        : this.routes[this.currentRouteIndex + 1]
     },
+  },
+  created() {
+    this.$on('animation-start-goDown', () => {
+      console.log('animation-start-goDown')
+    })
+  },
+  mounted() {
+    // this.setIsSiteFirstLoaded(true)
   },
 }
 </script>
@@ -138,6 +148,12 @@ export default {
 
   .fade-enter-active {
     animation: rotateNextEnter 0.6s forwards;
+  }
+
+  .first-loaded {
+    &.fade-enter-active {
+      animation: rotateNextEnter 0s forwards;
+    }
   }
 
   @keyframes rotateNextLeave {

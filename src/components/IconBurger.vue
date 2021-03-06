@@ -17,10 +17,10 @@ export default {
     ...mapGetters(['isMenuNavigationOpened']),
   },
   methods: {
-    ...mapMutations(['setMenuNavigation']),
+    ...mapMutations(['setIsMenuNavigation']),
 
     switchMenu() {
-      this.setMenuNavigation(!this.isMenuNavigationOpened)
+      this.setIsMenuNavigation(!this.isMenuNavigationOpened)
       // this.$emit('openNavigation')
     },
   },
@@ -31,6 +31,9 @@ export default {
 @import '../styles/index.scss';
 
 .icon-burger {
-  z-index: $zIndex-2;
+  position: fixed;
+  right: 50px;
+  top: 40px;
+  z-index: $zIndex-3;
 }
 </style>

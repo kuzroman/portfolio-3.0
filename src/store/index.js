@@ -1,20 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import app from './app'
+import game from './game'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
-    isMenuNavigationOpened: false,
-    isActiveBurger: false,
-  },
-  getters: {
-    isMenuNavigationOpened: (state) => state.isMenuNavigationOpened,
-    isActiveBurger: (state) => state.isActiveBurger,
-  },
-  mutations: {
-    setMenuNavigation(state, bool) {
-      state.isMenuNavigationOpened = bool
-    },
+  modules: {
+    app,
+    game,
   },
 })

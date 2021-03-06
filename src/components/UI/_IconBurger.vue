@@ -1,6 +1,6 @@
 <template>
   <div
-    class="icon-burger"
+    class="ui-icon-burger"
     @mouseover="addActive"
     @mouseleave="removeActive"
     :class="{ active: isActive }"
@@ -33,10 +33,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.icon-burger {
-  position: fixed;
-  right: 50px;
-  top: 40px;
+.ui-icon-burger {
   cursor: pointer;
   padding: 5px 4px;
 

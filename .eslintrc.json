@@ -1,6 +1,8 @@
 {
   "ignorePatterns": ["dist", "node_modules"],
   "rules": {
+    "no-underscore-dangle": "off",
+    "lines-between-class-members": "off",
     "no-param-reassign": [
       "error",
       {
@@ -63,5 +65,6 @@
     "sourceType": "module"
   },
   "plugins": ["prettier"],
+  "parser": "babel-eslint", // add static class variables
   "settings": { "import/resolver": "webpack" }
 }

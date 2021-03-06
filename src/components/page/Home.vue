@@ -1,19 +1,15 @@
 <template>
   <div class="home">
-    <!--    <img src="https://loremflickr.com/640/360" alt="" />-->
-    <h1>Home</h1>
-    <p>
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias dolorum
-      exercitationem fuga ipsam nesciunt quis ratione veritatis! Accusamus ad
-      asperiores blanditiis culpa dolores eligendi, hic, nam officia rem
-      sapiente voluptatibus.
-    </p>
+    <GameShooter />
   </div>
 </template>
 
 <script>
+import GameShooter from '../GameShooter.vue'
+
 export default {
   name: 'PageHome',
+  components: { GameShooter },
 
   mounted() {},
   computed: {},

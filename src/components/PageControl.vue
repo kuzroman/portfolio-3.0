@@ -3,10 +3,12 @@
     class="page-control"
     :direction="direction"
     :text="text"
+    :hidePageControl="hidePageControl"
   ></UI_IconArrow>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import UI_IconArrow from './UI/_IconArrow.vue'
 
 export default {
@@ -19,13 +21,20 @@ export default {
   data() {
     return {}
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['hidePageControl']),
+
+    // classPageControl() {
+    //   return this.hidePageControl ? '' : 'fadeOut'
+    // },
+  },
   methods: {},
 }
 </script>
 
 <style lang="scss">
 @import '../styles/index.scss';
+
 .page-control {
   z-index: $zIndex-2;
 }

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="icon-arrow"
+    class="ui-icon-arrow"
     :class="classList"
     @mouseover="addActive"
     @mouseleave="removeActive"
@@ -16,6 +16,7 @@ export default {
   props: {
     direction: { type: String, default: 'left' },
     text: { type: String, default: 'someText' },
+    hidePageControl: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -26,7 +27,8 @@ export default {
     classList() {
       let active = { active: this.isActive }
       let direction = { [this.direction]: true }
-      return { ...active, ...direction }
+      let fadeOut = { fadeOut: this.hidePageControl }
+      return { ...active, ...direction, ...fadeOut }
     },
   },
   methods: {
@@ -41,16 +43,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../styles/props.scss';
+@import './_props.scss';
 
 $iconSize: 36px;
 
-.icon-arrow {
+.ui-icon-arrow {
   width: $iconSize;
   height: $iconSize;
   position: relative;
   cursor: pointer;
+  //transition: right 0.3s ease, left 0.3s ease;
+  //transition-delay: 0.3s;
   //border: 1px solid;
+
+  &.left,
+  &.right {
+    left: 0;
+    transition: left 0.6s;
+  }
 
   & span {
     display: block;
@@ -143,6 +153,45 @@ $iconSize: 36px;
         }
         &:after {
           transform: rotate(150deg);
+        }
+      }
+    }
+  }
+
+  &.fadeOut {
+    & span {
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    &.left {
+      left: -200%;
+      & span {
+        left: 50%;
+        transition: left 0.3s;
+        transition-delay: 0.3s;
+      }
+
+      & em {
+        &:before,
+        &:after {
+          transform: rotate(90deg);
+          transition: opacity 0.3s;
+        }
+      }
+    }
+    &.right {
+      left: 200%;
+      & span {
+        right: 50%;
+        transition: right 0.3s;
+        transition-delay: 0.3s;
+      }
+
+      & em {
+        &:before,
+        &:after {
+          transform: rotate(-90deg);
+          transition: opacity 0.3s;
         }
       }
     }
