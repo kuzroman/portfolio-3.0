@@ -70,7 +70,6 @@ export default {
         : this.routes[this.currentRouteIndex - 1]
     },
     nextRoute() {
-      // console.log(111)
       return this.currentRouteIndex === this.routesLen - 1
         ? this.routes[0]
         : this.routes[this.currentRouteIndex + 1]
