@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    <PageLoader />
+    <PageLoader v-if="!isPageLoaderHide" />
     <MenuNavigation />
     <IconBurger />
 
@@ -39,13 +39,13 @@ export default {
   },
   methods: {
     ...mapMutations(['toPage', 'setIsSiteFirstLoaded']),
-
-    // pageLoaderGoDown() {
-    //   console.log('pageLoaderGoDown')
-    // },
   },
   computed: {
-    ...mapGetters(['transitionDirection', 'isSiteFirstLoaded']),
+    ...mapGetters([
+      'transitionDirection',
+      'isSiteFirstLoaded',
+      'isPageLoaderHide',
+    ]),
 
     routes() {
       return this.$router.options.routes

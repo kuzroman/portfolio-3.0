@@ -7,8 +7,7 @@ export default {
     hidePageControl: false,
     isActiveBurger: false,
     transitionDirection: '', // to-left || to-right
-    // isPageLoaderHide: new Promise(resolve => {resolve()}),
-    isPageLoaderHide: false,
+    isPageLoaderHide: true, // true - disable PageLoader.vue
   }),
   getters: {
     isSiteFirstLoaded: (state) => state.isSiteFirstLoaded,

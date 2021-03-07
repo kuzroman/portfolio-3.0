@@ -1,5 +1,5 @@
 <template>
-  <div class="menu" :class="{ active: isMenuNavigationOpened }">
+  <div class="menu-navigation" :class="{ active: isMenuNavigationOpened }">
     <nav>
       <a v-for="route in routes" :key="route.name" @click="toPage({ route })">
         <span>{{ route.name }}</span>
@@ -27,20 +27,20 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../styles/index.scss';
 
-.menu {
-  position: fixed;
+.menu-navigation {
+  position: absolute;
   width: 100%;
   height: 100%;
   z-index: $zIndex-3;
   background: $bg-6;
-  top: -100%;
-  transition: top 0.4s;
+  transform: translateY(-100%);
+  transition: transform 0.4s;
 
   &.active {
-    top: 0;
+    transform: translateY(0);
   }
 
   & > nav {

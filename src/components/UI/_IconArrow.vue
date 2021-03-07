@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'UI_IconArrow', // animation/_IconArrow
+  name: 'UI_IconArrow',
   props: {
     direction: { type: String, default: 'left' },
     text: { type: String, default: 'someText' },
@@ -42,7 +42,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './_props.scss';
 
 $iconSize: 36px;
@@ -52,9 +52,6 @@ $iconSize: 36px;
   height: $iconSize;
   position: relative;
   cursor: pointer;
-  //transition: right 0.3s ease, left 0.3s ease;
-  //transition-delay: 0.3s;
-  //border: 1px solid;
 
   &.left,
   &.right {

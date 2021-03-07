@@ -1,7 +1,7 @@
 <template>
   <div class="button-play">
     <div class="ground"></div>
-    <UI_Button />
+    <UI_Button :text="text" />
   </div>
 </template>
 
@@ -11,9 +11,11 @@ import UI_Button from '../UI/_Button.vue'
 export default {
   name: 'ButtonPlay',
   components: { UI_Button },
+  props: {},
   data() {
     return {
       barrier: {},
+      text: 'Destroy this text',
     }
   },
   computed: {},

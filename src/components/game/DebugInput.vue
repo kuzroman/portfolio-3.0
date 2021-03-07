@@ -17,7 +17,7 @@ export default {
   background: #1c2334;
   padding: 5px 10px;
   position: absolute;
-  top: 0;
+  top: 200px;
   left: 0;
 }
 </style>

@@ -9,6 +9,7 @@
 
 <script>
 import { mapMutations } from 'vuex'
+const time = 300
 
 export default {
   data() {
@@ -35,7 +36,6 @@ export default {
     ...mapMutations(['setIsPageLoaderHide']),
 
     runAnimations() {
-      const time = 300
       Object.keys(this.animation).map((key, i) => {
         setTimeout(() => {
           this.animation[key] = true
@@ -46,10 +46,9 @@ export default {
   },
   created() {
     this.$on('animation-start-goDown', () => {
-      // setTimeout(() => {
-      //   this.$emit('animation-stop-goDown')
-      // }, 300)
-      this.setIsPageLoaderHide(true)
+      setTimeout(() => {
+        this.setIsPageLoaderHide(true)
+      }, time)
     })
 
     this.runAnimations()
@@ -67,13 +66,13 @@ export default {
   width: 100%;
   height: 100%;
   position: absolute;
-  top: 0;
   background: $bg-5;
   z-index: $zIndex-4;
-  transition: top 0.3s, opacity 0.6s;
+  transform: translateY(0);
+  transition: transform 0.3s, opacity 0.6s;
 
   &.goDown {
-    top: 100%;
+    transform: translateY(100%);
     opacity: 0;
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="ui-button" :class="{ active: isActive }">
+  <div class="ui-button">
     {{ text }}
   </div>
 </template>
@@ -11,30 +11,20 @@ export default {
     text: { type: String, default: 'Button' },
   },
   data() {
-    return {
-      isActive: false,
-    }
+    return {}
   },
   computed: {},
-  methods: {
-    // addActive() {
-    //   this.isActive = true
-    // },
-    // removeActive() {
-    //   this.isActive = false
-    // },
-  },
+  methods: {},
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import './_props.scss';
 
 .ui-button {
-  border-top: 1px solid $bg-1;
-  background: #42b983;
+  background: $bg-2;
   padding: 8px;
-  color: #fff;
+  color: $bg-4;
   text-align: center;
   font-weight: bold;
   border-radius: 2px;

@@ -32,7 +32,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .ui-icon-burger {
   cursor: pointer;
   padding: 5px 4px;

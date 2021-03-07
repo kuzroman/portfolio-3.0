@@ -7,7 +7,7 @@ export default class Seed {
   #gravityY = getRandomInRange(1, 5)
   #speed = getRandomInRange(2, 5) / 10
   #bounceNum = 0
-  #maxBounceNum = 1
+  #maxBounceNum = 5
   #revert = false
 
   constructor(x, y) {
@@ -68,9 +68,5 @@ export default class Seed {
   _moveX() {
     this.x += Math.round(this.#gravityX / 7)
     this.#gravityX = Math.round((this.#gravityX + this.#speed) * 100) / 100
-  }
-  
-  static some() {
-    console.log(1);
   }
 }
