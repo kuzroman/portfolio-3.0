@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="page-game">
     <GameShooter />
   </div>
 </template>
@@ -8,7 +8,7 @@
 import GameShooter from '../GameShooter.vue'
 
 export default {
-  name: 'PageHome',
+  name: 'PageGame',
   components: { GameShooter },
 
   mounted() {},
@@ -16,10 +16,10 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.home {
+<style lang="scss">
+.page-game {
   width: 100%;
   height: 100%;
-  //background: #fc0;
+  display: block !important;
 }
 </style>

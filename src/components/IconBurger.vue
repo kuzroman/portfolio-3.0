@@ -21,7 +21,6 @@ export default {
 
     switchMenu() {
       this.setIsMenuNavigation(!this.isMenuNavigationOpened)
-      // this.$emit('openNavigation')
     },
   },
 }
@@ -32,8 +31,15 @@ export default {
 
 .icon-burger {
   position: fixed;
-  right: 50px;
-  top: 40px;
+  top: 1em;
+  right: 2em;
   z-index: $zIndex-3;
+}
+
+@media (max-width: 481px) {
+  .icon-burger {
+    top: 2em;
+    right: 1em;
+  }
 }
 </style>

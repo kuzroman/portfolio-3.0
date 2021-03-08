@@ -103,7 +103,6 @@ export default {
       justify-content: center;
       flex-direction: column;
       padding: 2em;
-      //background: $bg-8;
       position: absolute;
       height: 100%;
 

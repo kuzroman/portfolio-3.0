@@ -1,5 +1,5 @@
 <template>
-  <div class="status-bar">
+  <div class="status-bar" :class="{ active: isActive }">
     <div class="status-bar--top">
       <div class="score">{{ score }} points</div>
       <div class="status-bar--right">
@@ -8,7 +8,7 @@
         <div class="time">{{ time }}s</div>
       </div>
     </div>
-    <UI_Loader_line class="loader-Line" :percent="60" />
+    <UI_Loader_line class="loader-Line" :percent="percent" />
   </div>
 </template>
 
@@ -22,10 +22,12 @@ export default {
   components: { UI_Loader_line, IconTime, IconShield },
   props: {
     score: { type: Number, default: 0 },
+    isActive: { type: Boolean, default: false },
   },
   data() {
     return {
       time: 30,
+      percent: 100,
     }
   },
 }
@@ -38,6 +40,26 @@ export default {
   position: absolute;
   top: 1em;
   left: 2em;
+  transform: translateY(-5em);
+  transition: transform 0.3s;
+
+  & .score,
+  & .time,
+  & .icon-time,
+  & .icon-shield {
+    transform: translateY(-2em);
+  }
+
+  &.active {
+    transform: translateY(0);
+
+    & .score,
+    & .time,
+    & .icon-time,
+    & .icon-shield {
+      transform: translateY(0);
+    }
+  }
 
   &--top {
     display: flex;
@@ -54,6 +76,7 @@ export default {
     line-height: 1.4em;
     font-weight: bold;
     display: inline-block;
+    transition: transform 0.3s 0.1s;
   }
 
   .time {
@@ -62,6 +85,14 @@ export default {
     line-height: 1.4em;
     font-weight: bold;
     display: inline-block;
+    transition: transform 0.3s 0.4s;
+  }
+
+  & .icon-time {
+    transition: transform 0.3s 0.2s;
+  }
+  & .icon-shield {
+    transition: transform 0.3s 0.3s;
   }
 }
 </style>
