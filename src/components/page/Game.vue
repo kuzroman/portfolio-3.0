@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import GameShooter from '../GameShooter.vue'
+import GameShooter from '../game/MainGame.vue'
 
 export default {
   name: 'PageGame',

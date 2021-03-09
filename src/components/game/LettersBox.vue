@@ -13,13 +13,14 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Letter from '../../game/Letter'
-import Seed from '../../game/Seed'
+import { mapGetters, mapMutations } from 'vuex'
+import Canvas from './models/Canvas'
+import Letter from './models/Letter'
+import Seed from './models/Seed'
+import Bullet from './models/Bullet'
 import DebugInput from './DebugInput.vue'
 
 let intervalLetters, intervalSeed
-let ctx = HTMLElement || null
 
 export default {
   name: 'LettersBox',
@@ -27,15 +28,16 @@ export default {
   props: {
     isDebug: { type: Boolean, default: false },
     barrier: { type: Object, default: null },
+    shot: { type: Object, default: null },
   },
   data() {
     return {
       seeds: [],
       numSeedsForOneLetter: 3,
-      isSeedsFell: false,
       fps60: 16, // 1000/60
       isPaused: false,
-      canvasBg: '#2f2f2f',
+      canvas: null,
+      bullets: [],
     }
   },
   computed: {
@@ -61,8 +63,16 @@ export default {
     isPageLoaderHide() {
       this.startAnimations()
     },
+    shot(shot) {
+      // let innerShot = { ...this.shot }
+      let bullet = new Bullet(shot.x, shot.y)
+      this.bullets.push(bullet)
+      console.log(this.bullets)
+    },
   },
   methods: {
+    ...mapMutations(['setIsSeedsFall']),
+
     addText() {
       this.lettersEl = document.querySelector('#lettersEl')
       let el
@@ -81,8 +91,9 @@ export default {
       intervalLetters = setInterval(() => {
         if (i <= letters.length - 1) {
           this.showLetter(letters[i])
+        } else {
+          clearInterval(intervalLetters)
         }
-        if (this.isSeedsFell) clearInterval(intervalLetters)
         i++
       }, this.fps60)
     },
@@ -106,33 +117,34 @@ export default {
       }
     },
     startSeedsFall() {
-      if (this.isPaused) return
+      this.setIsSeedsFall(true)
       intervalSeed = setInterval(() => {
-        if (this.isSeedsFell) clearInterval(intervalSeed)
-
         if (this.isPaused) return
-        this.clearCanvas()
+        this.canvas.clearCanvas(this.viewPortWidth, this.viewPortHeight)
         this.updateSeeds()
+        // this.updateBullets()
+        console.log(1)
+        if (!this.seeds.length) {
+          clearInterval(intervalSeed)
+          this.setIsSeedsFall(false)
+        }
       }, this.fps60)
-    },
-    drawSeed(seed) {
-      ctx.fillStyle = '#fff'
-      ctx.fillRect(seed.x, seed.y, seed.size, seed.size)
-    },
-    clearCanvas() {
-      ctx.fillStyle = this.canvasBg
-      ctx.fillRect(0, 0, this.viewPortWidth, this.viewPortHeight)
     },
     updateSeeds() {
       this.seeds = this.seeds.filter((seed) => {
         seed.updateSeed(this.barrier)
-        this.drawSeed(seed)
+        this.canvas.drawRect(seed)
         return !seed.isStopped
       })
+    },
+    updateBullets() {
+      this.bullets = this.bullets.filter((bullet) => {
+        bullet.updateBullet()
+        // console.log(bullet)
+        this.canvas.drawRect(bullet)
 
-      if (!this.seeds.length) {
-        this.isSeedsFell = true
-      }
+        return !bullet.isStopped
+      })
     },
     pause(bool) {
       this.isPaused = bool
@@ -140,15 +152,16 @@ export default {
     createCanvas() {
       // method should run after mounted!
       let canvas = document.getElementById('canvas')
-      ctx = canvas.getContext('2d')
       canvas.width = this.viewPortWidth
       canvas.height = this.viewPortHeight
+      this.canvas = new Canvas(canvas)
     },
     startAnimations() {
       this.createCanvas()
       this.addText()
       this.startShowText()
       this.startSeedsFall()
+      // this.canvasAnimations()
     },
   },
   mounted() {

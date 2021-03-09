@@ -1,12 +1,12 @@
 <template>
-  <div class="button-play">
-    <div class="ground"></div>
+  <div class="button-play" @click="handleClick" :class="{ hide: isReady }">
     <UI_Button :text="text" />
   </div>
 </template>
 
 <script>
 import UI_Button from '../UI/_Button.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'ButtonPlay',
@@ -15,11 +15,25 @@ export default {
   data() {
     return {
       barrier: {},
-      text: 'Destroy this text',
+      textDefault: 'Destroy this text',
+      textWaiting: 'Wait for falling ...',
+      isReady: false,
     }
   },
-  computed: {},
+  computed: {
+    ...mapGetters(['isSeedsFall']),
+
+    text() {
+      return this.isSeedsFall ? this.textWaiting : this.textDefault
+    },
+  },
   methods: {
+    handleClick() {
+      if (!this.isSeedsFall) {
+        this.isReady = true
+        this.$emit('button-play--game-ready', this.isReady)
+      }
+    },
     createBarrier() {
       let rect = this.$el.getBoundingClientRect()
       this.barrier = {
@@ -31,7 +45,7 @@ export default {
   },
   mounted() {
     this.createBarrier()
-    this.$emit('mounted-button-play', this.barrier)
+    this.$emit('button-play--mounted', this.barrier)
   },
 }
 </script>
@@ -40,20 +54,20 @@ export default {
 @import '../../styles/props.scss';
 
 .button-play {
-  width: 200px;
+  width: 12em;
   z-index: $zIndex-1;
   position: absolute;
   bottom: 100px;
   left: calc(50%);
-  transform: translateX(-100px);
-  transition: 0.3s bottom;
+  transform: translate(-6em, 0);
+  transition: transform 0.3s;
 
   &:hover {
     bottom: 98px;
   }
 
-  //& .ground {
-  //  background: #ffcc00;
-  //}
+  &.hide {
+    transform: translateY(10em);
+  }
 }
 </style>
