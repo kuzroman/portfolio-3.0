@@ -1,5 +1,5 @@
 <template>
-  <div class="letter-box">
+  <div class="canvas-letters">
     <div class="letters" id="lettersEl"></div>
     <canvas id="canvas"></canvas>
 
@@ -23,7 +23,7 @@ import DebugInput from './DebugInput.vue'
 let intervalLetters, intervalSeed
 
 export default {
-  name: 'LettersBox',
+  name: 'CanvasLetters',
   components: { DebugInput },
   props: {
     isDebug: { type: Boolean, default: false },
@@ -177,7 +177,7 @@ export default {
 </script>
 
 <style lang="scss">
-.letter-box {
+.canvas-letters {
   & .letters {
     width: 100%;
     position: absolute;
@@ -204,7 +204,7 @@ export default {
 }
 
 @media (max-width: 481px) {
-  .letter-box {
+  .canvas-letters {
     & .letters {
       width: 100%;
       left: 0;

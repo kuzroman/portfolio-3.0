@@ -1,6 +1,6 @@
 <template>
   <div class="main-game" @click="makeShot" @mousemove="moveShooter">
-    <LettersBox :isDebug="isDebug" :barrier="barrier" :shot="shot" />
+    <CanvasLetters :isDebug="isDebug" :barrier="barrier" :shot="shot" />
     <ButtonPlay
       @button-play--mounted="setBarrier"
       @button-play--game-ready="gameReady"
@@ -14,15 +14,15 @@
 import ButtonPlay from './ButtonPlay.vue'
 import StatusBar from './StatusBar.vue'
 import RobotShooter from './RobotShooter.vue'
-import LettersBox from './LettersBox.vue'
+import CanvasLetters from './CanvasLetters.vue'
 
 export default {
   name: 'GameShooter',
-  components: { ButtonPlay, StatusBar, RobotShooter, LettersBox },
+  components: { ButtonPlay, StatusBar, RobotShooter, CanvasLetters },
   data() {
     return {
       barrier: null,
-      isDebug: false,
+      isDebug: true,
       isReady: false,
       shooterX: 0,
       shot: {},
