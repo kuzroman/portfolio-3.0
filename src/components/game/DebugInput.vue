@@ -1,5 +1,8 @@
 <template>
-  <pre class="debug-input">{{ seeds }}</pre>
+  <div class="debug-input">
+    <pre class="left">{{ [...seeds, ...bullets] }}</pre>
+    <pre class="right">{{ letters }}</pre>
+  </div>
 </template>
 
 <script>
@@ -8,6 +11,8 @@ export default {
   props: {
     isDebug: { type: Boolean, default: false },
     seeds: { type: Array, default: [] },
+    bullets: { type: Array, default: [] },
+    letters: { type: Array, default: [] },
   },
   data() {
     return {
@@ -36,11 +41,20 @@ export default {
 
 <style lang="scss">
 .debug-input {
-  border: 1px solid #42b983;
-  background: #1c2334;
-  padding: 5px 10px;
-  position: absolute;
-  top: 200px;
-  left: 0;
+  pre {
+    border: 1px solid #42b983;
+    background: #1c2334;
+    padding: 5px 10px;
+    position: absolute;
+    top: 200px;
+  }
+
+  .left {
+    left: 0;
+  }
+
+  .right {
+    right: 0;
+  }
 }
 </style>

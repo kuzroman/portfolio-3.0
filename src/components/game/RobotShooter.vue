@@ -1,17 +1,23 @@
 <template>
-  <div class="robot-shooter" :class="{ active: isActive }" :style="left"></div>
+  <div class="robot-shooter" :class="stiles" :style="left"></div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
   name: 'RobotShooter',
   props: {
-    isActive: { type: Boolean, default: false },
     shooterX: { type: Number, default: 0 },
   },
   computed: {
+    ...mapGetters(['isGameReady', 'isGameFinished']),
+
     left() {
       return { left: this.shooterX + 'px' }
+    },
+    stiles() {
+      return { active: this.isGameReady && !this.isGameFinished }
     },
   },
 }

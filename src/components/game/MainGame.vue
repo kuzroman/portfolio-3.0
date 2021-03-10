@@ -1,12 +1,10 @@
 <template>
   <div class="main-game" @click="makeShot" @mousemove="moveShooter">
-    <LettersBox :isDebug="isDebug" :barrier="barrier" :shot="shot" />
-    <ButtonPlay
-      @button-play--mounted="setBarrier"
-      @button-play--game-ready="gameReady"
-    />
-    <StatusBar :isActive="isReady" />
-    <RobotShooter :isActive="isReady" :shooterX="shooterX" />
+    <CanvasLetters :isDebug="isDebug" :barrier="barrier" :shot="shot" />
+    <ButtonPlay @button-play--mounted="setBarrier" />
+    <StatusBar />
+    <RobotShooter :shooterX="shooterX" />
+    <ScoreBoard />
   </div>
 </template>
 
@@ -14,28 +12,39 @@
 import ButtonPlay from './ButtonPlay.vue'
 import StatusBar from './StatusBar.vue'
 import RobotShooter from './RobotShooter.vue'
-import LettersBox from './LettersBox.vue'
+import CanvasLetters from './CanvasLetters.vue'
+import ScoreBoard from './ScoreBoard.vue'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
-  name: 'GameShooter',
-  components: { ButtonPlay, StatusBar, RobotShooter, LettersBox },
+  name: 'MainGame',
+  components: {
+    ButtonPlay,
+    StatusBar,
+    RobotShooter,
+    CanvasLetters,
+    ScoreBoard,
+  },
   data() {
     return {
       barrier: null,
-      isDebug: false,
-      isReady: false,
+      isDebug: true,
       shooterX: 0,
       shot: {},
     }
   },
+  computed: {
+    ...mapGetters(['isGameFinished', 'isGameReady']),
+  },
   methods: {
+    ...mapMutations(['setIsGameStart']),
+
     setBarrier(barrier) {
       this.barrier = barrier
     },
-    gameReady(isReady) {
-      this.isReady = isReady
-    },
     makeShot(ev) {
+      if (!this.isGameReady || this.isGameFinished) return
+      this.setIsGameStart(true)
       this.shot = { x: ev.clientX, y: ev.clientY }
     },
     moveShooter(ev) {

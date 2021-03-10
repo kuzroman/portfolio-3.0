@@ -5,9 +5,9 @@ export default class Canvas {
     this.ctx = canvas.getContext('2d')
   }
 
-  drawRect(circle, color) {
+  drawRect(x, y, size, color) {
     this.ctx.fillStyle = color || '#fff'
-    this.ctx.fillRect(circle.x, circle.y, circle.size, circle.size)
+    this.ctx.fillRect(x, y, size, size)
   }
 
   clearCanvas(viewPortWidth, viewPortHeight) {

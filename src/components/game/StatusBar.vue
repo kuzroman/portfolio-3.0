@@ -1,5 +1,5 @@
 <template>
-  <div class="status-bar" :class="{ active: isActive }">
+  <div class="status-bar" :class="{ active: isGameReady }">
     <div class="status-bar--top">
       <div class="score">{{ score }} points</div>
       <div class="status-bar--right">
@@ -16,19 +16,37 @@
 import UI_Loader_line from '../UI/_LoaderLine.vue'
 import IconTime from './IconTime.vue'
 import IconShield from './IconShield.vue'
+import { mapGetters, mapMutations } from 'vuex'
+let intervalTime
 
 export default {
   name: 'StatusBar',
   components: { UI_Loader_line, IconTime, IconShield },
   props: {
     score: { type: Number, default: 0 },
-    isActive: { type: Boolean, default: false },
   },
   data() {
     return {
-      time: 30,
+      time: 300,
       percent: 100,
     }
+  },
+  watch: {
+    isGameStart() {
+      intervalTime = setInterval(() => {
+        this.time -= 1
+        if (this.time <= 0 || this.isGameFinished) {
+          this.setIsGameFinished(true)
+          clearInterval(intervalTime)
+        }
+      }, 1000)
+    },
+  },
+  computed: {
+    ...mapGetters(['isGameReady', 'isGameStart', 'isGameFinished']),
+  },
+  methods: {
+    ...mapMutations(['setIsGameFinished']),
   },
 }
 </script>

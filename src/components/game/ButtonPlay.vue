@@ -1,12 +1,12 @@
 <template>
-  <div class="button-play" @click="handleClick" :class="{ hide: isReady }">
+  <div class="button-play" @click="handleClick" :class="stiles">
     <UI_Button :text="text" />
   </div>
 </template>
 
 <script>
 import UI_Button from '../UI/_Button.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'ButtonPlay',
@@ -17,21 +17,26 @@ export default {
       barrier: {},
       textDefault: 'Destroy this text',
       textWaiting: 'Wait for falling ...',
-      isReady: false,
     }
   },
   computed: {
-    ...mapGetters(['isSeedsFall']),
+    ...mapGetters(['isSeedsFall', 'isGameReady']),
 
     text() {
       return this.isSeedsFall ? this.textWaiting : this.textDefault
     },
+    stiles() {
+      return { hide: this.isGameReady }
+    },
   },
   methods: {
+    ...mapMutations(['setIsGameReady']),
+
     handleClick() {
       if (!this.isSeedsFall) {
-        this.isReady = true
-        this.$emit('button-play--game-ready', this.isReady)
+        setTimeout(() => {
+          this.setIsGameReady(true)
+        })
       }
     },
     createBarrier() {

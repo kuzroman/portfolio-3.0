@@ -1,30 +1,43 @@
 <template>
-  <div class="letter-box">
-    <div class="letters" id="lettersEl"></div>
+  <div class="canvas-letters">
+    <div class="letters" id="lettersEl">
+      <template v-for="letter in letters">
+        <LetterTag
+          :isShow="letter.isShow"
+          :isKilled="letter.isKilled"
+          :sign="letter.sign"
+          :key="letter.id"
+          @letter-tag--show="letterShowed"
+        />
+      </template>
+    </div>
     <canvas id="canvas"></canvas>
 
     <DebugInput
       v-if="isDebug"
       :isDebug="isDebug"
       :seeds="seeds"
+      :bullets="bullets"
+      :letters="letters"
       @debug-input--pause="pause"
     />
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 import { mapGetters, mapMutations } from 'vuex'
 import Canvas from './models/Canvas'
-import Letter from './models/Letter'
 import Seed from './models/Seed'
 import Bullet from './models/Bullet'
 import DebugInput from './DebugInput.vue'
+import LetterTag from './LetterTag.vue'
 
-let intervalLetters, intervalSeed
+let intervalLetters, intervalSeed, intervalBullets
 
 export default {
-  name: 'LettersBox',
-  components: { DebugInput },
+  name: 'CanvasLetters',
+  components: { DebugInput, LetterTag },
   props: {
     isDebug: { type: Boolean, default: false },
     barrier: { type: Object, default: null },
@@ -32,12 +45,13 @@ export default {
   },
   data() {
     return {
+      letters: [],
       seeds: [],
+      bullets: [],
       numSeedsForOneLetter: 3,
       fps60: 16, // 1000/60
       isPaused: false,
       canvas: null,
-      bullets: [],
     }
   },
   computed: {
@@ -45,12 +59,12 @@ export default {
 
     description() {
       return this.isDebug
-        ? 'A'
-        : `Hello, my name is Roman.
-          I am a web Front-End developer and UI enthusiast.
-          SPA, animation, Vue.js, are my passion
-          Check this out some projects on my Work page.
-          Feel free if you want say hello at kuzroman@list.ru then do it!)`
+        ? 'Hello'
+        : 'Hello, my name is Roman.|' +
+            'I am a web Front-End developer and UI enthusiast.|' +
+            'SPA, animation, Vue.js, are my passion.|' +
+            'Check this out some projects on my Work page.|' +
+            'Feel free if you want say hello at kuzroman@list.ru then do it!)'
     },
     viewPortWidth() {
       return window.innerWidth
@@ -64,65 +78,63 @@ export default {
       this.startAnimations()
     },
     shot(shot) {
-      // let innerShot = { ...this.shot }
       let bullet = new Bullet(shot.x, shot.y)
       this.bullets.push(bullet)
-      console.log(this.bullets)
+      this.startBulletMove()
     },
   },
   methods: {
-    ...mapMutations(['setIsSeedsFall']),
+    ...mapMutations([
+      'setIsSeedsFall',
+      // 'createLetters',
+      // 'updateLetter',
+      'setIsGameFinished',
+    ]),
 
-    addText() {
-      this.lettersEl = document.querySelector('#lettersEl')
-      let el
-      this.lettersEl.innerHTML = ''
-      ;[...this.description].forEach((letter) => {
-        el = document.createElement('i')
-        el.innerText = letter
-        el.className = 'hide'
-        this.lettersEl.append(el)
-      })
+    createLetters() {
+      this.letters = Array.from(this.description, (letter, i) => ({
+        sign: letter === ' ' ? '-' : letter,
+        isKilled: letter === ' ' || letter === '|',
+        isShow: false,
+        id: i,
+      }))
     },
-    startShowText() {
-      let i = 0
-      let letters = this.createLetters()
+    updateLetter(letter) {
+      Vue.set(this.letters, letter.id, letter)
+    },
 
+    startShowLetters() {
+      let i = 0,
+        letter
       intervalLetters = setInterval(() => {
-        if (i <= letters.length - 1) {
-          this.showLetter(letters[i])
+        if (i <= this.letters.length - 1) {
+          letter = this.letters[i]
+          this.letters[i].isShow = true
+          Vue.set(this.letters, i, letter)
         } else {
           clearInterval(intervalLetters)
         }
         i++
       }, this.fps60)
     },
-    showLetter(letter) {
-      letter['el'].style.opacity = 1
-      this.addSeed({ x: letter.x1, y: letter.y1 })
+    letterShowed(data) {
+      let letter = this.letters[data.id]
+      this.updateLetter({ ...letter, ...data })
+      this.addSeed(data)
     },
-    createLetters() {
-      let objList = []
-      this.lettersEl.querySelectorAll('i').forEach((el) => {
-        let rect = el.getBoundingClientRect()
-        let letter = new Letter(el, rect)
-        objList.push(letter)
-      })
-      return objList
-    },
-    addSeed(positions) {
+    addSeed(props) {
       for (let i = 0; i < this.numSeedsForOneLetter; i++) {
-        let seed = new Seed(positions.x, positions.y)
+        let seed = new Seed(props.x1, props.y1)
         this.seeds.push(seed)
       }
     },
     startSeedsFall() {
       this.setIsSeedsFall(true)
+      clearInterval(intervalSeed)
       intervalSeed = setInterval(() => {
         if (this.isPaused) return
         this.canvas.clearCanvas(this.viewPortWidth, this.viewPortHeight)
         this.updateSeeds()
-        // this.updateBullets()
         console.log(1)
         if (!this.seeds.length) {
           clearInterval(intervalSeed)
@@ -130,22 +142,58 @@ export default {
         }
       }, this.fps60)
     },
+    startBulletMove() {
+      clearInterval(intervalBullets)
+      intervalBullets = setInterval(() => {
+        if (this.isPaused) return
+        this.canvas.clearCanvas(this.viewPortWidth, this.viewPortHeight)
+        this.updateBullets()
+        console.log(2)
+        if (!this.bullets.length) {
+          clearInterval(intervalBullets)
+        }
+      }, this.fps60)
+    },
     updateSeeds() {
       this.seeds = this.seeds.filter((seed) => {
         seed.updateSeed(this.barrier)
-        this.canvas.drawRect(seed)
+        this.canvas.drawRect(seed.x, seed.y, seed.size)
         return !seed.isStopped
       })
     },
     updateBullets() {
       this.bullets = this.bullets.filter((bullet) => {
         bullet.updateBullet()
-        // console.log(bullet)
-        this.canvas.drawRect(bullet)
-
+        this.updateStateGame(bullet)
+        this.canvas.drawRect(bullet.x1, bullet.y1, bullet.size, '#fc0')
         return !bullet.isStopped
       })
     },
+
+    getLifeLetters() {
+      return this.letters.filter((letter) => !letter.isKilled)
+    },
+    checkHits(bullet, lifeLetters) {
+      lifeLetters.forEach((letter) => {
+        if (
+          bullet.y1 < letter.y1 &&
+          ((bullet.x1 < letter.x1 && letter.x1 < bullet.x2) ||
+            (bullet.x1 < letter.x2 && letter.x2 < bullet.x2))
+        ) {
+          letter.isKilled = true
+        }
+      })
+    },
+
+    updateStateGame(bullet) {
+      let lifeLetters = this.getLifeLetters()
+      if (lifeLetters.length) {
+        this.checkHits(bullet, lifeLetters)
+      } else {
+        this.setIsGameFinished(true)
+      }
+    },
+
     pause(bool) {
       this.isPaused = bool
     },
@@ -158,8 +206,8 @@ export default {
     },
     startAnimations() {
       this.createCanvas()
-      this.addText()
-      this.startShowText()
+      this.createLetters()
+      this.startShowLetters()
       this.startSeedsFall()
       // this.canvasAnimations()
     },
@@ -172,12 +220,13 @@ export default {
   destroyed() {
     clearInterval(intervalLetters)
     clearInterval(intervalSeed)
+    clearInterval(intervalBullets)
   },
 }
 </script>
 
 <style lang="scss">
-.letter-box {
+.canvas-letters {
   & .letters {
     width: 100%;
     position: absolute;
@@ -187,10 +236,6 @@ export default {
     font-size: 1.4em;
     text-align: center;
     margin-top: 8em;
-
-    & .hide {
-      opacity: 0;
-    }
   }
 
   & #canvas {
@@ -199,12 +244,11 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    //opacity: 0.5;
   }
 }
 
 @media (max-width: 481px) {
-  .letter-box {
+  .canvas-letters {
     & .letters {
       width: 100%;
       left: 0;
@@ -213,6 +257,7 @@ export default {
     }
   }
 }
+
 //@media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ }
 //@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ }
 //@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }

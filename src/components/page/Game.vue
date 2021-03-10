@@ -1,15 +1,15 @@
 <template>
   <div class="page-game">
-    <GameShooter />
+    <MainGame />
   </div>
 </template>
 
 <script>
-import GameShooter from '../game/MainGame.vue'
+import MainGame from '../game/MainGame.vue'
 
 export default {
   name: 'PageGame',
-  components: { GameShooter },
+  components: { MainGame },
 
   mounted() {},
   computed: {},

@@ -10,9 +10,9 @@ export default class Seed {
   #maxBounceNum = 5
   #revert = false
 
-  constructor(x, y) {
-    this.x = x || 0
-    this.y = y || 0
+  constructor(x1, y1) {
+    this.x = x1 || 0
+    this.y = y1 || 0
     this.size = getRandomInRange(1, 3)
     this.isStopped = false
   }
