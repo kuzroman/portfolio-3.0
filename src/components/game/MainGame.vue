@@ -1,11 +1,16 @@
 <template>
-  <div class="main-game" @click="makeShot" @mousemove="moveShooter">
+  <div
+    class="main-game"
+    @click="makeShot"
+    @mousemove="moveShooter"
+    :key="mainGameKey"
+  >
     <CanvasLetters :isDebug="isDebug" :barrier="barrier" :shot="shot" />
     <ButtonPlay
       @button-play--mounted="setBarrier"
       @button-play--restart="restartGame"
     />
-    <StatusBar />
+    <StatusBar :time="time" />
     <!--    :handleClick="handleClick"-->
     <RobotShooter :shooterX="shooterX" ref="robotShooter" />
     <ScoreBoard />
@@ -32,21 +37,25 @@ export default {
   data() {
     return {
       barrier: null,
-      isDebug: true,
+      isDebug: false,
+      time: 5,
       shooterX: 0,
       shot: {},
+      mainGameKey: 0,
     }
   },
   computed: {
     ...mapGetters(['isGameFinished', 'isGameReady']),
   },
   methods: {
-    ...mapMutations(['setIsGameStart', 'setIsGameFinished']),
+    ...mapMutations(['setIsGameStart', 'resetStateGame']),
 
+    forceUpdateComponent() {
+      this.mainGameKey += 1
+    },
     restartGame() {
-      // restore letters ...
-      this.setIsGameStart(false)
-      this.setIsGameFinished(false)
+      this.resetStateGame()
+      this.forceUpdateComponent()
     },
     setBarrier(barrier) {
       this.barrier = barrier

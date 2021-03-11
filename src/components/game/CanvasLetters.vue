@@ -19,7 +19,6 @@
       :seeds="seeds"
       :bullets="bullets"
       :letters="letters"
-      :shrapnel="shrapnel"
       @debug-input--pause="pause"
     />
   </div>
@@ -28,13 +27,13 @@
 <script>
 import Vue from 'vue'
 import { mapGetters, mapMutations } from 'vuex'
-import Canvas from './models/Canvas'
-import Seed from './models/Seed'
-import Bullet from './models/Bullet'
+import Canvas from './abstractions/Canvas'
+import Seed from './abstractions/Seed'
+import Bullet from './abstractions/Bullet'
 import DebugInput from './DebugInput.vue'
 import LetterTag from './LetterTag.vue'
 
-let intervalLetters, intervalSeed, intervalBullets
+let intervalLetters, intervalSeed, intervalBullets, animationId
 
 export default {
   name: 'CanvasLetters',
@@ -48,7 +47,6 @@ export default {
     return {
       letters: [],
       seeds: [],
-      shrapnel: [],
       bullets: [],
       numSeedsForOneLetter: 3,
       fps60: 16, // 1000/60
@@ -61,7 +59,7 @@ export default {
 
     description() {
       return this.isDebug
-        ? 'Hello'
+        ? 'Hello q'
         : 'Hello, my name is Roman.|' +
             'I am a Front-End developer with 10 years experience.|' +
             'SPA, js, Vue, HTML, sass... are my passion.|' +
@@ -82,7 +80,8 @@ export default {
     shot(shot) {
       let bullet = new Bullet(shot.x, shot.y)
       this.bullets.push(bullet)
-      this.startBulletMove()
+      // this.startBulletMove()
+      this.startAnimation()
     },
   },
   methods: {
@@ -96,7 +95,7 @@ export default {
         id: i,
       }))
     },
-    updateLetter(letter) {
+    setLetterPosition(letter) {
       Vue.set(this.letters, letter.id, letter)
     },
 
@@ -106,7 +105,7 @@ export default {
       intervalLetters = setInterval(() => {
         if (i <= this.letters.length - 1) {
           letter = this.letters[i]
-          this.letters[i].isShow = true
+          letter.isShow = true
           Vue.set(this.letters, i, letter)
         } else {
           clearInterval(intervalLetters)
@@ -114,74 +113,53 @@ export default {
         i++
       }, this.fps60)
     },
+
+    // data has position XY from LetterTag
     letterShowed(data) {
       let letter = this.letters[data.id]
-      this.updateLetter({ ...letter, ...data })
+      this.setLetterPosition({ ...letter, ...data })
       this.addSeed(data)
     },
-
-    addSeed(props) {
+    addSeed(props, type) {
       for (let i = 0; i < this.numSeedsForOneLetter; i++) {
-        let seed = new Seed(props.x1, props.y1)
+        let seed = new Seed(props.x1, props.y1, type)
         this.seeds.push(seed)
       }
     },
-    addShrapnel(props) {
-      // Array.from(Array(3),() => {})
-      for (let i = 0; i < this.numSeedsForOneLetter; i++) {
-        let shrapnel = new Seed(props.x1, props.y1)
-        this.shrapnel.push(shrapnel)
-      }
-    },
 
-    startSeedsFall() {
+    startAnimation() {
       this.setIsSeedsFall(true)
-      clearInterval(intervalSeed)
-      intervalSeed = setInterval(() => {
+      clearInterval(animationId)
+
+      animationId = setInterval(() => {
         if (this.isPaused) return
         this.canvas.clearCanvas(this.viewPortWidth, this.viewPortHeight)
+
         this.updateSeeds()
-        console.log(1)
-        if (!this.seeds.length) {
-          clearInterval(intervalSeed)
-          this.setIsSeedsFall(false)
-        }
-      }, this.fps60)
-    },
-    startBulletMove() {
-      clearInterval(intervalBullets)
-      intervalBullets = setInterval(() => {
-        if (this.isPaused) return
-        this.canvas.clearCanvas(this.viewPortWidth, this.viewPortHeight)
         this.updateBullets()
-        this.updateShrapnel()
-        console.log(2)
-        if (!this.bullets.length && !this.shrapnel.length) {
-          clearInterval(intervalBullets)
+        console.log(1)
+
+        if (!this.seeds.length && !this.bullets.length) {
+          clearInterval(animationId)
+          this.setIsSeedsFall(false)
         }
       }, this.fps60)
     },
 
     updateSeeds() {
-      this.seeds = this.seeds.filter((one) => {
-        one.updateSeed(this.barrier)
-        this.canvas.drawRect(one.x, one.y, one.size)
-        return !one.isStopped
+      this.seeds = this.seeds.filter((seed) => {
+        seed.update(this.barrier)
+        this.canvas.drawRect(seed.x, seed.y, seed.size)
+        return !seed.isStopped
       })
     },
-    updateShrapnel() {
-      this.shrapnel = this.shrapnel.filter((one) => {
-        one.updateShrapnel()
-        this.canvas.drawRect(one.x, one.y, one.size)
-        return !one.isStopped
-      })
-    },
+
     updateBullets() {
       this.bullets = this.bullets.filter((bullet) => {
-        bullet.updateBullet()
-        let lifeLetters = this.getLifeLetters()
-        if (lifeLetters.length) {
-          this.checkHits(bullet, lifeLetters)
+        bullet.update()
+        let aliveLetters = this.getLifeLetters()
+        if (aliveLetters.length) {
+          this.checkHits(bullet, aliveLetters)
         } else {
           this.setIsGameFinished(true)
         }
@@ -193,15 +171,15 @@ export default {
     getLifeLetters() {
       return this.letters.filter((letter) => !letter.isKilled)
     },
-    checkHits(bullet, lifeLetters) {
-      lifeLetters.forEach((letter) => {
+    checkHits(bullet, aliveLetters) {
+      aliveLetters.forEach((letter) => {
         if (
           bullet.y1 < letter.y1 &&
           ((bullet.x1 < letter.x1 && letter.x1 < bullet.x2) ||
             (bullet.x1 < letter.x2 && letter.x2 < bullet.x2))
         ) {
           letter.isKilled = true
-          this.addShrapnel({ x1: bullet.x1, y1: bullet.y1 })
+          this.addSeed({ x1: bullet.x1, y1: bullet.y1 }, 'shrapnel')
         }
       })
     },
@@ -220,7 +198,7 @@ export default {
       this.createCanvas()
       this.createLetters()
       this.startShowLetters()
-      this.startSeedsFall()
+      this.startAnimation()
     },
   },
   mounted() {

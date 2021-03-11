@@ -2,7 +2,7 @@
 //   Math.floor(Math.random() * (max - min + 1) + min)
 
 export default class Bullet {
-  #gravityY = 5 // getRandomInRange(5, 10)
+  #gravityY = 10 // getRandomInRange(5, 10)
   #ground = -20
 
   constructor(x, y) {
@@ -15,7 +15,7 @@ export default class Bullet {
     this.isStopped = false
   }
 
-  updateBullet() {
+  update() {
     if (this._isOverScreen()) {
       this.isStopped = true
       return

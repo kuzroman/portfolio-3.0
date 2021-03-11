@@ -10,15 +10,22 @@ export default class Seed {
   #maxBounceNum = 5
   #revert = false
 
-  constructor(x1, y1) {
+  constructor(x1, y1, type = 'default') {
     this.x = x1 || 0
     this.y = y1 || 0
     this.size = getRandomInRange(1, 3)
     this.isStopped = false
     this.direction = Math.random() < 0.6 ? 1 : -1
+    this.type = type // default || shrapnel
   }
 
-  updateSeed(barrier) {
+  update(barrier) {
+    this.type === 'shrapnel'
+      ? this._updateShrapnel()
+      : this._updateSeed(barrier)
+  }
+
+  _updateSeed(barrier) {
     if (this._isBarrier(barrier)) {
       this.#revert = true
       this.#bounceNum += 1
@@ -35,7 +42,7 @@ export default class Seed {
     this._move()
   }
 
-  updateShrapnel() {
+  _updateShrapnel() {
     // if (this._isPlayer(player)) {
     //   this.y = this.#ground
     //   this.isStopped = true

@@ -1,18 +1,22 @@
-// import Seed from '../components/game/models/Seed'
 // import Vue from 'vue'
+
+const defaultIsGameReady = false
+const defaultIsGameStart = false
+const defaultIsGameFinished = false
 
 export default {
   state: () => ({
     isSeedsFall: false,
-    isGameReady: false,
-    isGameStart: false,
-    isGameFinished: false,
+    isGameReady: defaultIsGameReady,
+    isGameStart: defaultIsGameStart,
+    isGameFinished: defaultIsGameFinished,
   }),
   getters: {
     isSeedsFall: (state) => state.isSeedsFall,
     isGameReady: (state) => state.isGameReady,
     isGameStart: (state) => state.isGameStart,
     isGameFinished: (state) => state.isGameFinished,
+    // shrapnel: (state) => state.shrapnel,
   },
   mutations: {
     setIsSeedsFall(state, bool) {
@@ -30,5 +34,10 @@ export default {
     // updateLetter(state, letter) {
     //   Vue.set(state.letters, letter.id, letter)
     // },
+    resetStateGame(state) {
+      state.isGameReady = defaultIsGameReady
+      state.isGameStart = defaultIsGameStart
+      state.isGameFinished = defaultIsGameFinished
+    },
   },
 }

@@ -5,7 +5,7 @@
       <div class="status-bar--right">
         <IconTime />
         <IconShield />
-        <div class="time">{{ time }}s</div>
+        <div class="time">{{ haveTime }}s</div>
       </div>
     </div>
     <UI_Loader_line class="loader-Line" :percent="percent" />
@@ -24,18 +24,19 @@ export default {
   components: { UI_Loader_line, IconTime, IconShield },
   props: {
     score: { type: Number, default: 0 },
+    time: { type: Number, default: 30 },
   },
   data() {
     return {
-      time: 300,
       percent: 100,
+      haveTime: this.time,
     }
   },
   watch: {
     isGameStart() {
       intervalTime = setInterval(() => {
-        this.time -= 1
-        if (this.time <= 0 || this.isGameFinished) {
+        this.haveTime -= 1
+        if (this.haveTime <= 0 || this.isGameFinished) {
           this.setIsGameFinished(true)
           clearInterval(intervalTime)
         }
