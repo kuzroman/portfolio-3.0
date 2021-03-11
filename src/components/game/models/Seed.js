@@ -15,6 +15,7 @@ export default class Seed {
     this.y = y1 || 0
     this.size = getRandomInRange(1, 3)
     this.isStopped = false
+    this.direction = Math.random() < 0.6 ? 1 : -1
   }
 
   updateSeed(barrier) {
@@ -33,6 +34,22 @@ export default class Seed {
 
     this._move()
   }
+
+  updateShrapnel() {
+    // if (this._isPlayer(player)) {
+    //   this.y = this.#ground
+    //   this.isStopped = true
+    // }
+
+    if (this._isUnderGround()) {
+      this.isStopped = true
+      return
+    }
+
+    this._fallDown(this.direction)
+  }
+
+  // _isPlayer(player) {}
 
   _isBounceLimitReached() {
     return this.#maxBounceNum < this.#bounceNum
@@ -53,20 +70,20 @@ export default class Seed {
     } else this._fallDown()
   }
 
-  _fallDown() {
-    this._moveX()
+  _fallDown(direction = 1) {
+    this._moveX(direction)
     this.y += Math.round(this.#gravityY)
     this.#gravityY = Math.round((this.#gravityY + this.#speed) * 100) / 100
   }
 
-  _fallUp() {
-    this._moveX()
+  _fallUp(direction = 1) {
+    this._moveX(direction)
     this.y -= Math.round(this.#gravityY)
     this.#gravityY = Math.round((this.#gravityY - 1) * 100) / 100
   }
 
-  _moveX() {
-    this.x += Math.round(this.#gravityX / 7)
+  _moveX(direction = 1) {
+    this.x += direction * Math.round(this.#gravityX / 7)
     this.#gravityX = Math.round((this.#gravityX + this.#speed) * 100) / 100
   }
 }

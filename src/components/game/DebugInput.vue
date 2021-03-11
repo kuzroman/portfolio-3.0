@@ -1,6 +1,6 @@
 <template>
   <div class="debug-input">
-    <pre class="left">{{ [...seeds, ...bullets] }}</pre>
+    <pre class="left">{{ [...seeds, ...bullets, ...shrapnel] }}</pre>
     <pre class="right">{{ letters }}</pre>
   </div>
 </template>
@@ -13,6 +13,7 @@ export default {
     seeds: { type: Array, default: [] },
     bullets: { type: Array, default: [] },
     letters: { type: Array, default: [] },
+    shrapnel: { type: Array, default: [] },
   },
   data() {
     return {

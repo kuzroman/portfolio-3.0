@@ -19,6 +19,7 @@
       :seeds="seeds"
       :bullets="bullets"
       :letters="letters"
+      :shrapnel="shrapnel"
       @debug-input--pause="pause"
     />
   </div>
@@ -47,6 +48,7 @@ export default {
     return {
       letters: [],
       seeds: [],
+      shrapnel: [],
       bullets: [],
       numSeedsForOneLetter: 3,
       fps60: 16, // 1000/60
@@ -61,8 +63,8 @@ export default {
       return this.isDebug
         ? 'Hello'
         : 'Hello, my name is Roman.|' +
-            'I am a web Front-End developer and UI enthusiast.|' +
-            'SPA, animation, Vue.js, are my passion.|' +
+            'I am a Front-End developer with 10 years experience.|' +
+            'SPA, js, Vue, HTML, sass... are my passion.|' +
             'Check this out some projects on my Work page.|' +
             'Feel free if you want say hello at kuzroman@list.ru then do it!)'
     },
@@ -75,7 +77,7 @@ export default {
   },
   watch: {
     isPageLoaderHide() {
-      this.startAnimations()
+      this.prepareToGame()
     },
     shot(shot) {
       let bullet = new Bullet(shot.x, shot.y)
@@ -84,12 +86,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations([
-      'setIsSeedsFall',
-      // 'createLetters',
-      // 'updateLetter',
-      'setIsGameFinished',
-    ]),
+    ...mapMutations(['setIsSeedsFall', 'setIsGameFinished']),
 
     createLetters() {
       this.letters = Array.from(this.description, (letter, i) => ({
@@ -122,12 +119,21 @@ export default {
       this.updateLetter({ ...letter, ...data })
       this.addSeed(data)
     },
+
     addSeed(props) {
       for (let i = 0; i < this.numSeedsForOneLetter; i++) {
         let seed = new Seed(props.x1, props.y1)
         this.seeds.push(seed)
       }
     },
+    addShrapnel(props) {
+      // Array.from(Array(3),() => {})
+      for (let i = 0; i < this.numSeedsForOneLetter; i++) {
+        let shrapnel = new Seed(props.x1, props.y1)
+        this.shrapnel.push(shrapnel)
+      }
+    },
+
     startSeedsFall() {
       this.setIsSeedsFall(true)
       clearInterval(intervalSeed)
@@ -148,23 +154,37 @@ export default {
         if (this.isPaused) return
         this.canvas.clearCanvas(this.viewPortWidth, this.viewPortHeight)
         this.updateBullets()
+        this.updateShrapnel()
         console.log(2)
-        if (!this.bullets.length) {
+        if (!this.bullets.length && !this.shrapnel.length) {
           clearInterval(intervalBullets)
         }
       }, this.fps60)
     },
+
     updateSeeds() {
-      this.seeds = this.seeds.filter((seed) => {
-        seed.updateSeed(this.barrier)
-        this.canvas.drawRect(seed.x, seed.y, seed.size)
-        return !seed.isStopped
+      this.seeds = this.seeds.filter((one) => {
+        one.updateSeed(this.barrier)
+        this.canvas.drawRect(one.x, one.y, one.size)
+        return !one.isStopped
+      })
+    },
+    updateShrapnel() {
+      this.shrapnel = this.shrapnel.filter((one) => {
+        one.updateShrapnel()
+        this.canvas.drawRect(one.x, one.y, one.size)
+        return !one.isStopped
       })
     },
     updateBullets() {
       this.bullets = this.bullets.filter((bullet) => {
         bullet.updateBullet()
-        this.updateStateGame(bullet)
+        let lifeLetters = this.getLifeLetters()
+        if (lifeLetters.length) {
+          this.checkHits(bullet, lifeLetters)
+        } else {
+          this.setIsGameFinished(true)
+        }
         this.canvas.drawRect(bullet.x1, bullet.y1, bullet.size, '#fc0')
         return !bullet.isStopped
       })
@@ -181,17 +201,9 @@ export default {
             (bullet.x1 < letter.x2 && letter.x2 < bullet.x2))
         ) {
           letter.isKilled = true
+          this.addShrapnel({ x1: bullet.x1, y1: bullet.y1 })
         }
       })
-    },
-
-    updateStateGame(bullet) {
-      let lifeLetters = this.getLifeLetters()
-      if (lifeLetters.length) {
-        this.checkHits(bullet, lifeLetters)
-      } else {
-        this.setIsGameFinished(true)
-      }
     },
 
     pause(bool) {
@@ -204,17 +216,16 @@ export default {
       canvas.height = this.viewPortHeight
       this.canvas = new Canvas(canvas)
     },
-    startAnimations() {
+    prepareToGame() {
       this.createCanvas()
       this.createLetters()
       this.startShowLetters()
       this.startSeedsFall()
-      // this.canvasAnimations()
     },
   },
   mounted() {
     if (this.isPageLoaderHide) {
-      this.startAnimations()
+      this.prepareToGame()
     }
   },
   destroyed() {

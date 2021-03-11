@@ -15,29 +15,41 @@ export default {
   data() {
     return {
       barrier: {},
-      textDefault: 'Destroy this text',
-      textWaiting: 'Wait for falling ...',
+      texts: {
+        default: 'Destroy this text',
+        wait: 'Wait for falling ...',
+        again: 'Play again',
+      },
     }
   },
   computed: {
-    ...mapGetters(['isSeedsFall', 'isGameReady']),
+    ...mapGetters(['isSeedsFall', 'isGameReady', 'isGameFinished']),
 
     text() {
-      return this.isSeedsFall ? this.textWaiting : this.textDefault
+      return this.isGameFinished
+        ? this.texts.again
+        : this.isSeedsFall
+        ? this.texts.wait
+        : this.texts.default
     },
     stiles() {
-      return { hide: this.isGameReady }
+      return { hide: this.isGameReady && !this.isGameFinished }
     },
   },
   methods: {
     ...mapMutations(['setIsGameReady']),
 
     handleClick() {
-      if (!this.isSeedsFall) {
-        setTimeout(() => {
-          this.setIsGameReady(true)
-        })
+      if (this.isSeedsFall) return
+
+      if (this.isGameFinished) {
+        this.$emit('button-play--restart', this.barrier)
+        return
       }
+
+      setTimeout(() => {
+        this.setIsGameReady(true)
+      })
     },
     createBarrier() {
       let rect = this.$el.getBoundingClientRect()
@@ -59,12 +71,14 @@ export default {
 @import '../../styles/props.scss';
 
 .button-play {
-  width: 12em;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  width: 14em;
   z-index: $zIndex-1;
   position: absolute;
   bottom: 100px;
   left: calc(50%);
-  transform: translate(-6em, 0);
+  transform: translate(-7em, 0);
   transition: transform 0.3s;
 
   &:hover {
@@ -72,7 +86,7 @@ export default {
   }
 
   &.hide {
-    transform: translateY(10em);
+    transform: translateY(20em);
   }
 }
 </style>

@@ -1,9 +1,13 @@
 <template>
   <div class="main-game" @click="makeShot" @mousemove="moveShooter">
     <CanvasLetters :isDebug="isDebug" :barrier="barrier" :shot="shot" />
-    <ButtonPlay @button-play--mounted="setBarrier" />
+    <ButtonPlay
+      @button-play--mounted="setBarrier"
+      @button-play--restart="restartGame"
+    />
     <StatusBar />
-    <RobotShooter :shooterX="shooterX" />
+    <!--    :handleClick="handleClick"-->
+    <RobotShooter :shooterX="shooterX" ref="robotShooter" />
     <ScoreBoard />
   </div>
 </template>
@@ -37,15 +41,24 @@ export default {
     ...mapGetters(['isGameFinished', 'isGameReady']),
   },
   methods: {
-    ...mapMutations(['setIsGameStart']),
+    ...mapMutations(['setIsGameStart', 'setIsGameFinished']),
 
+    restartGame() {
+      // restore letters ...
+      this.setIsGameStart(false)
+      this.setIsGameFinished(false)
+    },
     setBarrier(barrier) {
       this.barrier = barrier
     },
     makeShot(ev) {
+      // console.log(this.$refs.robotShooter)
       if (!this.isGameReady || this.isGameFinished) return
       this.setIsGameStart(true)
-      this.shot = { x: ev.clientX, y: ev.clientY }
+      this.shot = {
+        x: ev.clientX,
+        y: this.$refs.robotShooter.$el.getBoundingClientRect().top,
+      }
     },
     moveShooter(ev) {
       this.shooterX = ev.clientX

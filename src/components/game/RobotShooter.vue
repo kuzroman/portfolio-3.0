@@ -9,6 +9,7 @@ export default {
   name: 'RobotShooter',
   props: {
     shooterX: { type: Number, default: 0 },
+    // handleClick: { type: Function, default: null },
   },
   computed: {
     ...mapGetters(['isGameReady', 'isGameFinished']),
