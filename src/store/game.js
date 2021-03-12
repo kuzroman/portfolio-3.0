@@ -1,12 +1,13 @@
 // import Vue from 'vue'
 
+const defaultIsSeedsFall = false
 const defaultIsGameReady = false
 const defaultIsGameStart = false
 const defaultIsGameFinished = false
 
 export default {
   state: () => ({
-    isSeedsFall: false,
+    isSeedsFall: defaultIsSeedsFall,
     isGameReady: defaultIsGameReady,
     isGameStart: defaultIsGameStart,
     isGameFinished: defaultIsGameFinished,
@@ -35,6 +36,7 @@ export default {
     //   Vue.set(state.letters, letter.id, letter)
     // },
     resetStateGame(state) {
+      state.isSeedsFall = defaultIsSeedsFall
       state.isGameReady = defaultIsGameReady
       state.isGameStart = defaultIsGameStart
       state.isGameFinished = defaultIsGameFinished

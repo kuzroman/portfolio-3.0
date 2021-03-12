@@ -2,7 +2,7 @@ const getRandomInRange = (min, max) =>
   Math.floor(Math.random() * (max - min + 1) + min)
 
 export default class Seed {
-  #ground = 1500
+  #ground = document.body.offsetHeight
   #gravityX = getRandomInRange(1, 5)
   #gravityY = getRandomInRange(1, 5)
   #speed = getRandomInRange(2, 5) / 10
@@ -11,8 +11,8 @@ export default class Seed {
   #revert = false
 
   constructor(x1, y1, type = 'default') {
-    this.x = x1 || 0
-    this.y = y1 || 0
+    this.x1 = x1 || 0
+    this.y1 = y1 || 0
     this.size = getRandomInRange(1, 3)
     this.isStopped = false
     this.direction = Math.random() < 0.6 ? 1 : -1
@@ -44,7 +44,7 @@ export default class Seed {
 
   _updateShrapnel() {
     // if (this._isPlayer(player)) {
-    //   this.y = this.#ground
+    //   this.y1 = this.#ground
     //   this.isStopped = true
     // }
 
@@ -63,12 +63,14 @@ export default class Seed {
   }
 
   _isUnderGround() {
-    return this.#ground < this.y
+    return this.#ground < this.y1
   }
 
   _isBarrier(barrier) {
     if (!barrier) return false
-    return this.y >= barrier.y && barrier.xFrom < this.x && this.x < barrier.xTo
+    return (
+      this.y1 >= barrier.y1 && barrier.xFrom < this.x1 && this.x1 < barrier.xTo
+    )
   }
 
   _move() {
@@ -79,18 +81,18 @@ export default class Seed {
 
   _fallDown(direction = 1) {
     this._moveX(direction)
-    this.y += Math.round(this.#gravityY)
+    this.y1 += Math.round(this.#gravityY)
     this.#gravityY = Math.round((this.#gravityY + this.#speed) * 100) / 100
   }
 
   _fallUp(direction = 1) {
     this._moveX(direction)
-    this.y -= Math.round(this.#gravityY)
+    this.y1 -= Math.round(this.#gravityY)
     this.#gravityY = Math.round((this.#gravityY - 1) * 100) / 100
   }
 
   _moveX(direction = 1) {
-    this.x += direction * Math.round(this.#gravityX / 7)
+    this.x1 += direction * Math.round(this.#gravityX / 7)
     this.#gravityX = Math.round((this.#gravityX + this.#speed) * 100) / 100
   }
 }

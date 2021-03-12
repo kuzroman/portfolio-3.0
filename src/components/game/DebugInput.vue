@@ -1,7 +1,9 @@
 <template>
   <div class="debug-input">
-    <pre class="left">{{ [...seeds, ...bullets] }}</pre>
-    <pre class="right">{{ letters }}</pre>
+    <!--    <pre class="left">{{ [...seeds, ...bullets] }}</pre>-->
+    <!--    <pre class="right">{{ letters }}</pre>-->
+    <pre class="left">{{ seeds }}</pre>
+    <pre class="right">{{ shooter }}</pre>
   </div>
 </template>
 
@@ -13,6 +15,7 @@ export default {
     seeds: { type: Array, default: [] },
     bullets: { type: Array, default: [] },
     letters: { type: Array, default: [] },
+    shooter: { type: Object, default: {} },
   },
   data() {
     return {

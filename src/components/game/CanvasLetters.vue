@@ -19,6 +19,7 @@
       :seeds="seeds"
       :bullets="bullets"
       :letters="letters"
+      :shooter="shooter"
       @debug-input--pause="pause"
     />
   </div>
@@ -41,7 +42,8 @@ export default {
   props: {
     isDebug: { type: Boolean, default: false },
     barrier: { type: Object, default: null },
-    shot: { type: Object, default: null },
+    shot: { type: Number, default: 0 },
+    shooter: { type: Object, default: () => {} },
   },
   data() {
     return {
@@ -77,10 +79,9 @@ export default {
     isPageLoaderHide() {
       this.prepareToGame()
     },
-    shot(shot) {
-      let bullet = new Bullet(shot.x, shot.y)
+    shot() {
+      let bullet = new Bullet(this.shooter.x1, this.shooter.y1)
       this.bullets.push(bullet)
-      // this.startBulletMove()
       this.startAnimation()
     },
   },
@@ -137,7 +138,7 @@ export default {
 
         this.updateSeeds()
         this.updateBullets()
-        console.log(1)
+        // console.log(1)
 
         if (!this.seeds.length && !this.bullets.length) {
           clearInterval(animationId)
@@ -149,7 +150,12 @@ export default {
     updateSeeds() {
       this.seeds = this.seeds.filter((seed) => {
         seed.update(this.barrier)
-        this.canvas.drawRect(seed.x, seed.y, seed.size)
+
+        if (seed.type === 'shrapnel') {
+          this.checkDamage(this.shooter, seed)
+        }
+
+        this.canvas.drawRect(seed.x1, seed.y1, seed.size)
         return !seed.isStopped
       })
     },
@@ -157,12 +163,14 @@ export default {
     updateBullets() {
       this.bullets = this.bullets.filter((bullet) => {
         bullet.update()
+
         let aliveLetters = this.getLifeLetters()
         if (aliveLetters.length) {
-          this.checkHits(bullet, aliveLetters)
+          this.checkGoals(bullet, aliveLetters)
         } else {
           this.setIsGameFinished(true)
         }
+
         this.canvas.drawRect(bullet.x1, bullet.y1, bullet.size, '#fc0')
         return !bullet.isStopped
       })
@@ -171,7 +179,7 @@ export default {
     getLifeLetters() {
       return this.letters.filter((letter) => !letter.isKilled)
     },
-    checkHits(bullet, aliveLetters) {
+    checkGoals(bullet, aliveLetters) {
       aliveLetters.forEach((letter) => {
         if (
           bullet.y1 < letter.y1 &&
@@ -182,6 +190,16 @@ export default {
           this.addSeed({ x1: bullet.x1, y1: bullet.y1 }, 'shrapnel')
         }
       })
+    },
+    checkDamage(shooter, seed) {
+      if (
+        shooter.y1 < seed.y1 &&
+        shooter.x1 < seed.x1 &&
+        seed.x1 < shooter.x2
+      ) {
+        seed.isStopped = true
+        this.$emit('canvas-letters-damage')
+      }
     },
 
     pause(bool) {

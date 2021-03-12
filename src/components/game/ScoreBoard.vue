@@ -7,6 +7,19 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'ScoreBoard',
+  props: {
+    damage: { type: Number, default: 0 },
+  },
+  data() {
+    return {
+      health: 100,
+    }
+  },
+  watch: {
+    damage(damage) {
+      this.health -= damage * 3
+    },
+  },
   computed: {
     ...mapGetters(['isGameFinished']),
   },

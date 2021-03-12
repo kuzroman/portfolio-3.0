@@ -8,14 +8,24 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'RobotShooter',
   props: {
-    shooterX: { type: Number, default: 0 },
-    // handleClick: { type: Function, default: null },
+    shooter: { type: Object, default: {} },
+    damage: { type: Number, default: 0 },
+  },
+  data() {
+    return {
+      damage: 100,
+    }
+  },
+  watch: {
+    damage(damage) {
+      this.health -= damage * 3
+    },
   },
   computed: {
     ...mapGetters(['isGameReady', 'isGameFinished']),
 
     left() {
-      return { left: this.shooterX + 'px' }
+      return { left: this.shooter.x1 + 'px' }
     },
     stiles() {
       return { active: this.isGameReady && !this.isGameFinished }
