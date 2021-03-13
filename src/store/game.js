@@ -1,5 +1,4 @@
 // import Vue from 'vue'
-
 const defaultIsSeedsFall = false
 const defaultIsGameReady = false
 const defaultIsGameStart = false
@@ -17,7 +16,6 @@ export default {
     isGameReady: (state) => state.isGameReady,
     isGameStart: (state) => state.isGameStart,
     isGameFinished: (state) => state.isGameFinished,
-    // shrapnel: (state) => state.shrapnel,
   },
   mutations: {
     setIsSeedsFall(state, bool) {

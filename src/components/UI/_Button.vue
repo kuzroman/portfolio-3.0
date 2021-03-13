@@ -9,6 +9,7 @@ export default {
   name: 'UI_Button',
   props: {
     text: { type: String, default: 'Button' },
+    disabled: { type: Boolean, default: false },
   },
   data() {
     return {}
@@ -44,7 +45,7 @@ export default {
     transition: 0.3s background-color;
   }
 
-  &:hover {
+  &:not(.disabled):hover {
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.7);
 
     &:after {

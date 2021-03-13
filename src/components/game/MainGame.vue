@@ -16,7 +16,7 @@
       @button-play--mounted="setBarrier"
       @button-play--restart="restartGame"
     />
-    <StatusBar :time="time" />
+    <StatusBar :time="time" :damage="damage" />
     <RobotShooter :shooter="shooter" :damage="damage" ref="robotShooter" />
     <ScoreBoard />
   </div>
@@ -77,15 +77,19 @@ export default {
       this.audio.replay()
     },
     moveShooter(ev) {
+      let shooterEl = this.$refs.robotShooter.$el
       this.shooter = {
         x1: ev.clientX,
-        y1: this.$refs.robotShooter.$el.getBoundingClientRect().top,
+        y1: shooterEl ? shooterEl.getBoundingClientRect().top : -200,
         x2: ev.clientX + this.$refs.robotShooter.$el.offsetWidth,
       }
     },
     getDamage() {
       this.damage += 1
     },
+  },
+  destroyed() {
+    this.restartGame()
   },
 }
 </script>

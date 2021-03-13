@@ -1,5 +1,10 @@
 <template>
-  <div class="button-play" @click="handleClick" :class="stiles">
+  <div
+    class="button-play"
+    @click="handleClick"
+    :disabled="disabled"
+    :class="stiles"
+  >
     <UI_Button :text="text" />
   </div>
 </template>
@@ -32,8 +37,14 @@ export default {
         ? this.texts.wait
         : this.texts.default
     },
+    disabled() {
+      return this.isSeedsFall
+    },
     stiles() {
-      return { hide: this.isGameReady && !this.isGameFinished }
+      return {
+        disabled: this.disabled,
+        hide: this.isGameReady && !this.isGameFinished,
+      }
     },
   },
   methods: {
@@ -67,7 +78,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../../styles/props.scss';
 
 .button-play {
@@ -81,7 +92,7 @@ export default {
   transform: translate(-7em, 0);
   transition: transform 0.3s;
 
-  &:hover {
+  &:not(.disabled):hover {
     bottom: 98px;
   }
 

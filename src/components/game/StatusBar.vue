@@ -8,7 +8,7 @@
         <div class="time">{{ haveTime }}s</div>
       </div>
     </div>
-    <UI_Loader_line class="loader-Line" :percent="percent" />
+    <UI_Loader_line class="loader-Line" :percent="health" />
   </div>
 </template>
 
@@ -25,10 +25,11 @@ export default {
   props: {
     score: { type: Number, default: 0 },
     time: { type: Number, default: 30 },
+    damage: { type: Number, default: 0 },
   },
   data() {
     return {
-      percent: 100,
+      health: 100,
       haveTime: this.time,
     }
   },
@@ -41,6 +42,9 @@ export default {
           clearInterval(intervalTime)
         }
       }, 1000)
+    },
+    damage() {
+      this.health -= 1
     },
   },
   computed: {
