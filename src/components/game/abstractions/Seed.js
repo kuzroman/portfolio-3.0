@@ -68,9 +68,7 @@ export default class Seed {
 
   _isBarrier(barrier) {
     if (!barrier) return false
-    return (
-      this.y1 >= barrier.y1 && barrier.xFrom < this.x1 && this.x1 < barrier.xTo
-    )
+    return this.y1 >= barrier.y1 && barrier.x1 < this.x1 && this.x1 < barrier.x2
   }
 
   _move() {

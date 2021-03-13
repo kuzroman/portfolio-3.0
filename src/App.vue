@@ -3,6 +3,7 @@
     <PageLoader v-if="!isPageLoaderHide" />
     <MenuNavigation />
     <IconBurger />
+    <SoundBar />
 
     <div class="content">
       <div class="content-arrow">
@@ -29,11 +30,12 @@ import { mapGetters, mapMutations } from 'vuex'
 import PageLoader from './components/PageLoader.vue'
 import MenuNavigation from './components/MenuNavigation.vue'
 import IconBurger from './components/IconBurger.vue'
+import SoundBar from './components/SoundBar.vue'
 import PageControl from './components/PageControl.vue'
 
 export default {
   name: 'App',
-  components: { PageLoader, IconBurger, MenuNavigation, PageControl },
+  components: { PageLoader, IconBurger, MenuNavigation, PageControl, SoundBar },
   data() {
     return {}
   },
@@ -74,14 +76,6 @@ export default {
         ? this.routes[0]
         : this.routes[this.currentRouteIndex + 1]
     },
-  },
-  created() {
-    this.$on('animation-start-goDown', () => {
-      console.log('animation-start-goDown')
-    })
-  },
-  mounted() {
-    // this.setIsSiteFirstLoaded(true)
   },
 }
 </script>

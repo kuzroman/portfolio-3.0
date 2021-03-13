@@ -33,6 +33,8 @@ import Seed from './abstractions/Seed'
 import Bullet from './abstractions/Bullet'
 import DebugInput from './DebugInput.vue'
 import LetterTag from './LetterTag.vue'
+import Audio from '../abstractions/Audio'
+import bitMp3 from '../../static/media/explode.mp3'
 
 let intervalLetters, intervalSeed, intervalBullets, animationId
 
@@ -54,6 +56,7 @@ export default {
       fps60: 16, // 1000/60
       isPaused: false,
       canvas: null,
+      audio: new Audio(bitMp3, 0.1),
     }
   },
   computed: {
@@ -188,6 +191,7 @@ export default {
         ) {
           letter.isKilled = true
           this.addSeed({ x1: bullet.x1, y1: bullet.y1 }, 'shrapnel')
+          this.audio.replay()
         }
       })
     },

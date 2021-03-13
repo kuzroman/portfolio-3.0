@@ -33,6 +33,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import './_props.scss';
+
 .ui-icon-burger {
   cursor: pointer;
   padding: 5px 4px;
@@ -42,7 +44,7 @@ export default {
     width: 42px;
     height: 2px;
     margin: 8px;
-    background-color: #7a7a7a;
+    background-color: $bg-1;
 
     &:nth-child(n) {
       transition: transform 0.45s cubic-bezier(0.43, 0.77, 0.15, 1.5),

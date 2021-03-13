@@ -10,14 +10,14 @@
       :barrier="barrier"
       :shot="shot"
       :shooter="shooter"
-      @canvas-letter-damage="getDamage"
+      @canvas-letters-damage="getDamage"
     />
     <ButtonPlay
       @button-play--mounted="setBarrier"
       @button-play--restart="restartGame"
     />
     <StatusBar :time="time" />
-    <RobotShooter :shooter="shooter" ref="robotShooter" />
+    <RobotShooter :shooter="shooter" :damage="damage" ref="robotShooter" />
     <ScoreBoard />
   </div>
 </template>
@@ -29,6 +29,8 @@ import RobotShooter from './RobotShooter.vue'
 import CanvasLetters from './CanvasLetters.vue'
 import ScoreBoard from './ScoreBoard.vue'
 import { mapGetters, mapMutations } from 'vuex'
+import Audio from '../abstractions/Audio'
+import shootMp3 from '../../static/media/shoot.mp3'
 
 export default {
   name: 'MainGame',
@@ -42,12 +44,14 @@ export default {
   data() {
     return {
       barrier: null,
-      isDebug: true,
+      isDebug: false,
       time: 500,
       shooter: {},
       shot: 0,
       mainGameKey: 0,
       damage: 0,
+      soundDamage: {},
+      audio: new Audio(shootMp3, 0.1),
     }
   },
   computed: {
@@ -66,10 +70,11 @@ export default {
     setBarrier(barrier) {
       this.barrier = barrier
     },
-    makeShot(ev) {
+    makeShot() {
       if (!this.isGameReady || this.isGameFinished) return
       this.setIsGameStart(true)
       this.shot += 1
+      this.audio.replay()
     },
     moveShooter(ev) {
       this.shooter = {
@@ -82,7 +87,6 @@ export default {
       this.damage += 1
     },
   },
-  mounted() {},
 }
 </script>
 

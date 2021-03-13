@@ -54,9 +54,9 @@ export default {
     createBarrier() {
       let rect = this.$el.getBoundingClientRect()
       this.barrier = {
-        xFrom: rect.left,
-        xTo: rect.left + rect.width,
-        y: rect.top,
+        x1: rect.left,
+        x2: rect.left + rect.width,
+        y1: rect.top,
       }
     },
   },

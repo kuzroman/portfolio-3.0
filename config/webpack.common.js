@@ -72,6 +72,11 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader'
       },
+      {
+        test: /\.mp3$/,
+        include: paths.src,
+        loader: 'file-loader'
+      }
     ],
 
   },
