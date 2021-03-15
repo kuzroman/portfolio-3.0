@@ -1,14 +1,24 @@
-// export default class Letter {
-//   constructor(sign, rect) {
-//     const left = Math.trunc(rect.left) + window.scrollX
-//     const top = Math.trunc(rect.top) + window.scrollY
-//
-//     // this.el = el
-//     this.sign = sign
-//     this.isKilled = false
-//     this.x1 = left
-//     // this.x2 = left + el.offsetWidth
-//     this.y1 = top
-//     // this.y2 = top + el.offsetHeight
-//   }
-// }
+export default class Letter {
+  isShow = false
+  x1 = 0
+  x2 = 0
+  y1 = 0
+  y2 = 0
+
+  constructor(letter, i) {
+    this.id = i
+    this.sign = letter === ' ' ? '-' : letter
+    this.isKilled = letter === ' ' || letter === '|'
+  }
+
+  setPosition(letter) {
+    this.x1 = letter.x1
+    this.x2 = letter.x2
+    this.y1 = letter.y1
+    this.y2 = letter.y2
+  }
+
+  show() {
+    this.isShow = true
+  }
+}

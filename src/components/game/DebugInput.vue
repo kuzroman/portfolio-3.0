@@ -1,9 +1,9 @@
 <template>
   <div class="debug-input">
-    <!--    <pre class="left">{{ [...seeds, ...bullets] }}</pre>-->
-    <!--    <pre class="right">{{ letters }}</pre>-->
-    <pre class="left">{{ seeds }}</pre>
-    <pre class="right">{{ shooter }}</pre>
+    <pre class="left">{{ [...seeds, ...bullets] }}</pre>
+    <pre class="right">{{ letters }}</pre>
+    <!--    <pre class="left">{{ seeds }}</pre>-->
+    <!--    <pre class="right">{{ shooter }}</pre>-->
   </div>
 </template>
 

@@ -1,7 +1,5 @@
 export default class Audio {
-  // audio = document.createElement('audio')
-
-  constructor(media, volume = 1) {
+  constructor(media, volume = 1, loop = false) {
     this.audio = document.createElement('audio')
     document.body.appendChild(this.audio)
     this.audio.src = media
@@ -9,6 +7,7 @@ export default class Audio {
     this.audio.setAttribute('controls', 'none')
     this.audio.style.display = 'none'
     this.audio.volume = volume
+    this.audio.loop = loop
   }
 
   isPlaying() {
@@ -18,11 +17,17 @@ export default class Audio {
   play(callback = () => {}) {
     this.audio.play().then((r) => callback(r))
   }
+
   pause() {
     this.audio.pause()
   }
+
   replay() {
     this.audio.currentTime = 0
     this.play()
+  }
+
+  destroy() {
+    this.audio.remove()
   }
 }

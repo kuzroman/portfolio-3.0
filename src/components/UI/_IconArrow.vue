@@ -16,7 +16,7 @@ export default {
   props: {
     direction: { type: String, default: 'left' },
     text: { type: String, default: 'someText' },
-    hidePageControl: { type: Boolean, default: false },
+    fadeOut: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -27,7 +27,7 @@ export default {
     classList() {
       let active = { active: this.isActive }
       let direction = { [this.direction]: true }
-      let fadeOut = { fadeOut: this.hidePageControl }
+      let fadeOut = { fadeOut: this.fadeOut }
       return { ...active, ...direction, ...fadeOut }
     },
   },

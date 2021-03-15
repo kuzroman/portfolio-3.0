@@ -1,4 +1,3 @@
-// import Vue from 'vue'
 const defaultIsSeedsFall = false
 const defaultIsGameReady = false
 const defaultIsGameStart = false
@@ -29,6 +28,7 @@ export default {
     },
     setIsGameFinished(state, bool) {
       state.isGameFinished = bool
+      state.isGameReady = false
     },
     // updateLetter(state, letter) {
     //   Vue.set(state.letters, letter.id, letter)

@@ -3,7 +3,7 @@
     class="page-control"
     :direction="direction"
     :text="text"
-    :hidePageControl="hidePageControl"
+    :fadeOut="fadeOut"
   ></UI_IconArrow>
 </template>
 
@@ -22,11 +22,11 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(['hidePageControl']),
+    ...mapGetters(['hidePageControl', 'isGameReady']),
 
-    // classPageControl() {
-    //   return this.hidePageControl ? '' : 'fadeOut'
-    // },
+    fadeOut() {
+      return this.hidePageControl || this.isGameReady
+    },
   },
   methods: {},
 }

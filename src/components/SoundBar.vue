@@ -8,28 +8,31 @@
 
 <script>
 import UiSoundBar from './UI/_SoundBar.vue'
-import backgroundMusic from '../static/media/background.mp3'
+import backgroundMusic from '../static/media/backgroundSite.mp3'
 import Audio from './abstractions/Audio'
+const audioBG = new Audio(backgroundMusic)
 
 export default {
   name: 'SoundBar',
   components: { UiSoundBar },
   data() {
     return {
-      audio: new Audio(backgroundMusic),
       isActive: false,
     }
   },
   methods: {
     switchPlayPause() {
-      if (this.audio.isPlaying()) {
-        this.audio.pause()
+      if (audioBG.isPlaying()) {
+        audioBG.pause()
         this.isActive = false
       } else {
-        this.audio.play()
+        audioBG.play()
         this.isActive = true
       }
     },
+  },
+  destroyed() {
+    audioBG.destroy()
   },
 }
 </script>

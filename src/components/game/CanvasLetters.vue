@@ -31,10 +31,12 @@ import { mapGetters, mapMutations } from 'vuex'
 import Canvas from './abstractions/Canvas'
 import Seed from './abstractions/Seed'
 import Bullet from './abstractions/Bullet'
+import Letter from './abstractions/Letter'
 import DebugInput from './DebugInput.vue'
 import LetterTag from './LetterTag.vue'
 import Audio from '../abstractions/Audio'
 import bitMp3 from '../../static/media/explode.mp3'
+const audioBit = new Audio(bitMp3, 0.3)
 
 let intervalLetters, intervalSeed, intervalBullets, animationId
 
@@ -45,7 +47,10 @@ export default {
     isDebug: { type: Boolean, default: false },
     barrier: { type: Object, default: null },
     shot: { type: Number, default: 0 },
-    shooter: { type: Object, default: () => {} },
+    shooter: {
+      type: Object,
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -56,7 +61,6 @@ export default {
       fps60: 16, // 1000/60
       isPaused: false,
       canvas: null,
-      audio: new Audio(bitMp3, 0.1),
     }
   },
   computed: {
@@ -92,17 +96,14 @@ export default {
     ...mapMutations(['setIsSeedsFall', 'setIsGameFinished']),
 
     createLetters() {
-      this.letters = Array.from(this.description, (letter, i) => ({
-        sign: letter === ' ' ? '-' : letter,
-        isKilled: letter === ' ' || letter === '|',
-        isShow: false,
-        id: i,
-      }))
+      this.letters = Array.from(
+        this.description,
+        (letter, i) => new Letter(letter, i)
+      )
     },
-    setLetterPosition(letter) {
+    updateState(letter) {
       Vue.set(this.letters, letter.id, letter)
     },
-
     startShowLetters() {
       let i = 0,
         letter
@@ -121,7 +122,10 @@ export default {
     // data has position XY from LetterTag
     letterShowed(data) {
       let letter = this.letters[data.id]
-      this.setLetterPosition({ ...letter, ...data })
+
+      letter.setPosition(data)
+      this.updateState(letter)
+
       this.addSeed(data)
     },
     addSeed(props, type) {
@@ -175,6 +179,7 @@ export default {
         }
 
         this.canvas.drawRect(bullet.x1, bullet.y1, bullet.size, '#fc0')
+        // this.canvas.drawRing(bullet.x1, bullet.y1, bullet.size, '#fc0')
         return !bullet.isStopped
       })
     },
@@ -187,11 +192,12 @@ export default {
         if (
           bullet.y1 < letter.y1 &&
           ((bullet.x1 < letter.x1 && letter.x1 < bullet.x2) ||
-            (bullet.x1 < letter.x2 && letter.x2 < bullet.x2))
+            (bullet.x1 < letter.x2 && letter.x2 < bullet.x2) ||
+            (letter.x1 < bullet.x1 && bullet.x2 < letter.x2))
         ) {
           letter.isKilled = true
           this.addSeed({ x1: bullet.x1, y1: bullet.y1 }, 'shrapnel')
-          this.audio.replay()
+          audioBit.replay()
         }
       })
     },
@@ -232,6 +238,7 @@ export default {
     clearInterval(intervalLetters)
     clearInterval(intervalSeed)
     clearInterval(intervalBullets)
+    audioBit.destroy()
   },
 }
 </script>

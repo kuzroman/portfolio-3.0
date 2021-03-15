@@ -6,6 +6,7 @@
 import { mapGetters } from 'vuex'
 import damageMp3 from '../../static/media/damage.mp3'
 import Audio from '../abstractions/Audio'
+const audioDamage = new Audio(damageMp3, 0.3)
 
 export default {
   name: 'RobotShooter',
@@ -16,13 +17,12 @@ export default {
   data() {
     return {
       showDamage: false,
-      audio: new Audio(damageMp3, 0.1),
     }
   },
   watch: {
     damage() {
       this.showDamage = true
-      this.audio.replay()
+      audioDamage.replay()
       setTimeout(() => {
         this.showDamage = false
       }, 300)
@@ -40,6 +40,9 @@ export default {
         damage: this.showDamage,
       }
     },
+  },
+  destroyed() {
+    audioDamage.destroy()
   },
 }
 </script>

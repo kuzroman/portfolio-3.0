@@ -31,6 +31,9 @@ import ScoreBoard from './ScoreBoard.vue'
 import { mapGetters, mapMutations } from 'vuex'
 import Audio from '../abstractions/Audio'
 import shootMp3 from '../../static/media/shoot.mp3'
+import backgroundGame from '../../static/media/backgroundGame.mp3'
+const audioShot = new Audio(shootMp3, 0.3)
+const audioBg = new Audio(backgroundGame, 0.5, true)
 
 export default {
   name: 'MainGame',
@@ -44,21 +47,28 @@ export default {
   data() {
     return {
       barrier: null,
-      isDebug: false,
+      isDebug: true,
       time: 500,
       shooter: {},
       shot: 0,
       mainGameKey: 0,
       damage: 0,
       soundDamage: {},
-      audio: new Audio(shootMp3, 0.1),
     }
   },
   computed: {
     ...mapGetters(['isGameFinished', 'isGameReady']),
   },
+  watch: {
+    isGameReady() {
+      audioBg.replay()
+    },
+    isGameFinished() {
+      audioBg.pause()
+    },
+  },
   methods: {
-    ...mapMutations(['setIsGameStart', 'resetStateGame']),
+    ...mapMutations(['setIsGameStart', 'resetStateGame', 'setIsGameFinished']),
 
     forceUpdateComponent() {
       this.mainGameKey += 1
@@ -66,6 +76,8 @@ export default {
     restartGame() {
       this.resetStateGame()
       this.forceUpdateComponent()
+      audioBg.destroy()
+      audioShot.destroy()
     },
     setBarrier(barrier) {
       this.barrier = barrier
@@ -74,14 +86,15 @@ export default {
       if (!this.isGameReady || this.isGameFinished) return
       this.setIsGameStart(true)
       this.shot += 1
-      this.audio.replay()
+      audioShot.replay()
     },
     moveShooter(ev) {
+      if (!this.$refs.robotShooter) return
       let shooterEl = this.$refs.robotShooter.$el
       this.shooter = {
         x1: ev.clientX,
-        y1: shooterEl ? shooterEl.getBoundingClientRect().top : -200,
-        x2: ev.clientX + this.$refs.robotShooter.$el.offsetWidth,
+        y1: shooterEl.getBoundingClientRect().top,
+        x2: ev.clientX + shooterEl.offsetWidth,
       }
     },
     getDamage() {

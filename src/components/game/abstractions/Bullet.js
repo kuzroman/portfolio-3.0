@@ -1,12 +1,9 @@
-// const getRandomInRange = (min, max) =>
-//   Math.floor(Math.random() * (max - min + 1) + min)
-
 export default class Bullet {
-  #gravityY = 10 // getRandomInRange(5, 10)
+  #gravityY = 10
   #ground = -20
 
   constructor(x, y) {
-    const size = 15
+    const size = 12
 
     this.x1 = x
     this.x2 = x + size

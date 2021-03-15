@@ -18,6 +18,7 @@ export default {
       x1: null,
       x2: null,
       y1: null,
+      y2: null,
       id: this.$vnode.key,
     }
   },
@@ -38,6 +39,7 @@ export default {
       this.x1 = Math.ceil(rect.left)
       this.y1 = Math.ceil(rect.top)
       this.x2 = Math.ceil(rect.left + this.$el.clientWidth)
+      this.y2 = Math.ceil(rect.top + this.$el.clientHeight)
     },
   },
 }

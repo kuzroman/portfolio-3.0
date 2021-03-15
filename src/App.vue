@@ -47,6 +47,7 @@ export default {
       'transitionDirection',
       'isSiteFirstLoaded',
       'isPageLoaderHide',
+      'isGameReady',
     ]),
 
     routes() {
@@ -96,12 +97,15 @@ export default {
       display: flex;
       justify-content: center;
       flex-direction: column;
-      padding: 2em;
       position: absolute;
       height: 100%;
 
+      &.left {
+        left: 2em;
+      }
+
       &.right {
-        right: 0;
+        right: 2em;
       }
     }
   }
@@ -120,14 +124,17 @@ export default {
     &.fade-leave-active {
       animation: rotateNextLeave 0.6s forwards;
     }
+
     &.fade-enter-active {
       animation: rotateNextEnter 0.6s forwards;
     }
   }
+
   .to-right {
     &.fade-leave-active {
       animation: rotatePrevLeave 0.6s forwards;
     }
+
     &.fade-enter-active {
       animation: rotatePrevEnter 0.6s forwards;
     }

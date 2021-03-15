@@ -44,7 +44,12 @@ export default {
       }, 1000)
     },
     damage() {
-      this.health -= 1
+      this.health -= 2
+    },
+    health(health) {
+      if (health <= 0) {
+        this.setIsGameFinished(true)
+      }
     },
   },
   computed: {
