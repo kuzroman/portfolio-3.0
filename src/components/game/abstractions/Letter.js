@@ -6,9 +6,11 @@ export default class Letter {
   y2 = 0
 
   constructor(letter, i) {
+    const isService = letter === ' ' || letter === '|'
     this.id = i
     this.sign = letter === ' ' ? '-' : letter
-    this.isKilled = letter === ' ' || letter === '|'
+    this.isKilled = isService
+    this.isService = isService
   }
 
   setPosition(letter) {
@@ -20,5 +22,13 @@ export default class Letter {
 
   show() {
     this.isShow = true
+  }
+
+  kill() {
+    this.isKilled = true
+  }
+
+  static getLifeLetters(letters) {
+    return letters.filter((letter) => !letter.isKilled)
   }
 }

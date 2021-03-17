@@ -5,23 +5,23 @@
     <IconBurger />
     <SoundBar />
 
-    <div class="content">
-      <div class="content-arrow">
+    <main class="content">
+      <transition name="fade">
+        <router-view class="view" :class="routeStyles"></router-view>
+      </transition>
+
+      <div class="content-arrow left" :class="{ hide: isGameReady }">
         <a @click="toPage({ route: prevRoute, direction: 'to-left' })">
           <PageControl direction="left" :text="prevRoute.name" />
         </a>
       </div>
 
-      <transition name="fade">
-        <router-view class="view" :class="routeStyles"></router-view>
-      </transition>
-
-      <div class="content-arrow right">
+      <div class="content-arrow right" :class="{ hide: isGameReady }">
         <a @click="toPage({ route: nextRoute, direction: 'to-right' })">
           <PageControl direction="right" :text="nextRoute.name" />
         </a>
       </div>
-    </div>
+    </main>
   </div>
 </template>
 
@@ -36,12 +36,7 @@ import PageControl from './components/PageControl.vue'
 export default {
   name: 'App',
   components: { PageLoader, IconBurger, MenuNavigation, PageControl, SoundBar },
-  data() {
-    return {}
-  },
-  methods: {
-    ...mapMutations(['toPage', 'setIsSiteFirstLoaded']),
-  },
+
   computed: {
     ...mapGetters([
       'transitionDirection',
@@ -78,6 +73,10 @@ export default {
         : this.routes[this.currentRouteIndex + 1]
     },
   },
+
+  methods: {
+    ...mapMutations(['toPage', 'setIsSiteFirstLoaded']),
+  },
 }
 </script>
 
@@ -91,7 +90,6 @@ export default {
     width: 100%;
     height: 100%;
     overflow: hidden;
-    display: flex;
 
     &-arrow {
       display: flex;
@@ -102,10 +100,22 @@ export default {
 
       &.left {
         left: 2em;
+        transform: translateX(0);
+        transition: transform 0.3s;
+
+        &.hide {
+          transform: translateX(-10em);
+        }
       }
 
       &.right {
         right: 2em;
+        transform: translateX(0);
+        transition: transform 0.3s;
+
+        &.hide {
+          transform: translateX(10em);
+        }
       }
     }
   }

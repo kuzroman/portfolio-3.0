@@ -11,34 +11,38 @@ const audioDamage = new Audio(damageMp3, 0.3)
 export default {
   name: 'RobotShooter',
   props: {
-    shooter: { type: Object, default: {} },
-    damage: { type: Number, default: 0 },
+    position: { type: Object, default: {} },
   },
   data() {
     return {
-      showDamage: false,
+      isDamage: false,
     }
   },
   watch: {
     damage() {
-      this.showDamage = true
+      this.showDamage()
       audioDamage.replay()
-      setTimeout(() => {
-        this.showDamage = false
-      }, 300)
     },
   },
   computed: {
-    ...mapGetters(['isGameReady', 'isGameFinished']),
+    ...mapGetters(['isGameReady', 'isGameFinished', 'damage']),
 
     left() {
-      return { left: this.shooter.x1 + 'px' }
+      return { left: this.position.x1 + 'px' }
     },
     stiles() {
       return {
         active: this.isGameReady && !this.isGameFinished,
-        damage: this.showDamage,
+        damage: this.isDamage,
       }
+    },
+  },
+  methods: {
+    showDamage() {
+      this.isDamage = true
+      setTimeout(() => {
+        this.isDamage = false
+      }, 300)
     },
   },
   destroyed() {
@@ -55,10 +59,14 @@ export default {
   bottom: 0;
   background: url('../../static/img/game/robot.png') no-repeat;
   transform: translateY(10em);
-  transition: transform 0.3s;
+  opacity: 0;
+  transition: transform 0.3s, opacity 0.3s;
+  display: none;
 
   &.active {
     transform: translateY(0);
+    opacity: 1;
+    display: block;
   }
 
   &.damage {

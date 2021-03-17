@@ -5,17 +5,17 @@
     :disabled="disabled"
     :class="stiles"
   >
-    <UI_Button :text="text" />
+    <UIButton :text="text" />
   </div>
 </template>
 
 <script>
-import UI_Button from '../UI/_Button.vue'
+import UIButton from '../UI/Button.vue'
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'ButtonPlay',
-  components: { UI_Button },
+  components: { UIButton },
   props: {},
   data() {
     return {
@@ -82,8 +82,6 @@ export default {
 @import '../../styles/props.scss';
 
 .button-play {
-  text-transform: uppercase;
-  font-size: 0.8em;
   width: 14em;
   z-index: $zIndex-1;
   position: absolute;
@@ -91,10 +89,6 @@ export default {
   left: calc(50%);
   transform: translate(-7em, 0);
   transition: transform 0.3s;
-
-  &:not(.disabled):hover {
-    bottom: 98px;
-  }
 
   &.hide {
     transform: translateY(20em);

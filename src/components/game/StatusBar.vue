@@ -1,11 +1,11 @@
 <template>
   <div class="status-bar" :class="{ active: isGameReady }">
     <div class="status-bar--top">
-      <div class="score">{{ score }} points</div>
+      <div class="score">{{ killedLetters }} killed</div>
       <div class="status-bar--right">
         <IconTime />
         <IconShield />
-        <div class="time">{{ haveTime }}s</div>
+        <div class="time">{{ timeLeft }}s</div>
       </div>
     </div>
     <UI_Loader_line class="loader-Line" :percent="health" />
@@ -13,38 +13,28 @@
 </template>
 
 <script>
-import UI_Loader_line from '../UI/_LoaderLine.vue'
+import UI_Loader_line from '../UI/LoaderLine.vue'
 import IconTime from './IconTime.vue'
 import IconShield from './IconShield.vue'
 import { mapGetters, mapMutations } from 'vuex'
+const healthDefault = 100
+
 let intervalTime
 
 export default {
   name: 'StatusBar',
   components: { UI_Loader_line, IconTime, IconShield },
-  props: {
-    score: { type: Number, default: 0 },
-    time: { type: Number, default: 30 },
-    damage: { type: Number, default: 0 },
-  },
   data() {
     return {
-      health: 100,
-      haveTime: this.time,
+      health: healthDefault,
     }
   },
   watch: {
     isGameStart() {
-      intervalTime = setInterval(() => {
-        this.haveTime -= 1
-        if (this.haveTime <= 0 || this.isGameFinished) {
-          this.setIsGameFinished(true)
-          clearInterval(intervalTime)
-        }
-      }, 1000)
+      this.runTimer()
     },
-    damage() {
-      this.health -= 2
+    damage(damage) {
+      this.health = healthDefault - damage
     },
     health(health) {
       if (health <= 0) {
@@ -53,10 +43,31 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['isGameReady', 'isGameStart', 'isGameFinished']),
+    ...mapGetters([
+      'isGameReady',
+      'isGameStart',
+      'isGameFinished',
+      'score',
+      'shots',
+      'letters',
+      'killedLetters',
+      'damage',
+      'timeLeft',
+    ]),
   },
   methods: {
-    ...mapMutations(['setIsGameFinished']),
+    ...mapMutations(['setIsGameFinished', 'setScore', 'decreaseTimeLeft']),
+
+    runTimer() {
+      intervalTime = setInterval(() => {
+        this.decreaseTimeLeft()
+
+        if (this.timeLeft <= 0 || this.isGameFinished) {
+          this.setIsGameFinished(true)
+          clearInterval(intervalTime)
+        }
+      }, 1000)
+    },
   },
 }
 </script>
@@ -94,6 +105,7 @@ export default {
     justify-content: space-between;
     margin-bottom: 0.4em;
   }
+
   &--right {
     display: flex;
   }
@@ -119,6 +131,7 @@ export default {
   & .icon-time {
     transition: transform 0.3s 0.2s;
   }
+
   & .icon-shield {
     transition: transform 0.3s 0.3s;
   }

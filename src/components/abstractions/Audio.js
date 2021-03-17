@@ -1,12 +1,8 @@
 export default class Audio {
   constructor(media, volume = 1, loop = false) {
     this.audio = document.createElement('audio')
-    document.body.appendChild(this.audio)
     this.audio.src = media
-    this.audio.setAttribute('preload', 'auto')
-    this.audio.setAttribute('controls', 'none')
-    this.audio.style.display = 'none'
-    this.audio.volume = volume
+    this.audio.volume = volume // 0 ?? volume
     this.audio.loop = loop
   }
 

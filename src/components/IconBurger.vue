@@ -1,14 +1,14 @@
 <template>
-  <UI_IconBurger class="icon-burger" @click.native="switchMenu" />
+  <UIIconBurger class="icon-burger" @click.native="switchMenu" />
 </template>
 
 <script>
-import UI_IconBurger from './UI/_IconBurger.vue'
+import UIIconBurger from './UI/IconBurger.vue'
 import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'iconBurger',
-  components: { UI_IconBurger },
+  components: { UIIconBurger },
   props: {},
   data() {
     return {}

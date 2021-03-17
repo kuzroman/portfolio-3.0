@@ -11,7 +11,11 @@
         />
       </template>
     </div>
-    <canvas id="canvas"></canvas>
+    <canvas
+      id="canvas"
+      :width="viewPortWidth"
+      :height="viewPortHeight"
+    ></canvas>
 
     <DebugInput
       v-if="isDebug"
@@ -36,22 +40,23 @@ import DebugInput from './DebugInput.vue'
 import LetterTag from './LetterTag.vue'
 import Audio from '../abstractions/Audio'
 import bitMp3 from '../../static/media/explode.mp3'
-const audioBit = new Audio(bitMp3, 0.3)
 
-let intervalLetters, intervalSeed, intervalBullets, animationId
+const audioBit = new Audio(bitMp3, 0.3)
+let intervalLetters, animationId
 
 export default {
   name: 'CanvasLetters',
   components: { DebugInput, LetterTag },
+
   props: {
     isDebug: { type: Boolean, default: false },
     barrier: { type: Object, default: null },
-    shot: { type: Number, default: 0 },
     shooter: {
       type: Object,
       default: () => {},
     },
   },
+
   data() {
     return {
       letters: [],
@@ -63,8 +68,9 @@ export default {
       canvas: null,
     }
   },
+
   computed: {
-    ...mapGetters(['isPageLoaderHide']),
+    ...mapGetters(['isPageLoaderHide', 'shots']),
 
     description() {
       return this.isDebug
@@ -75,25 +81,33 @@ export default {
             'Check this out some projects on my Work page.|' +
             'Feel free if you want say hello at kuzroman@list.ru then do it!)'
     },
+
     viewPortWidth() {
       return window.innerWidth
     },
+
     viewPortHeight() {
       return window.innerHeight
     },
   },
+
   watch: {
     isPageLoaderHide() {
       this.prepareToGame()
     },
-    shot() {
+
+    shots() {
       let bullet = new Bullet(this.shooter.x1, this.shooter.y1)
       this.bullets.push(bullet)
       this.startAnimation()
     },
+
+    letters(letters) {
+      this.setLetters(letters)
+    },
   },
   methods: {
-    ...mapMutations(['setIsSeedsFall', 'setIsGameFinished']),
+    ...mapMutations(['setIsSeedsFall', 'setIsGameFinished', 'setLetters']),
 
     createLetters() {
       this.letters = Array.from(
@@ -101,9 +115,11 @@ export default {
         (letter, i) => new Letter(letter, i)
       )
     },
+
     updateState(letter) {
       Vue.set(this.letters, letter.id, letter)
     },
+
     startShowLetters() {
       let i = 0,
         letter
@@ -128,6 +144,7 @@ export default {
 
       this.addSeed(data)
     },
+
     addSeed(props, type) {
       for (let i = 0; i < this.numSeedsForOneLetter; i++) {
         let seed = new Seed(props.x1, props.y1, type)
@@ -170,8 +187,7 @@ export default {
     updateBullets() {
       this.bullets = this.bullets.filter((bullet) => {
         bullet.update()
-
-        let aliveLetters = this.getLifeLetters()
+        let aliveLetters = Letter.getLifeLetters(this.letters)
         if (aliveLetters.length) {
           this.checkGoals(bullet, aliveLetters)
         } else {
@@ -184,9 +200,6 @@ export default {
       })
     },
 
-    getLifeLetters() {
-      return this.letters.filter((letter) => !letter.isKilled)
-    },
     checkGoals(bullet, aliveLetters) {
       aliveLetters.forEach((letter) => {
         if (
@@ -195,12 +208,13 @@ export default {
             (bullet.x1 < letter.x2 && letter.x2 < bullet.x2) ||
             (letter.x1 < bullet.x1 && bullet.x2 < letter.x2))
         ) {
-          letter.isKilled = true
+          letter.kill()
           this.addSeed({ x1: bullet.x1, y1: bullet.y1 }, 'shrapnel')
           audioBit.replay()
         }
       })
     },
+
     checkDamage(shooter, seed) {
       if (
         shooter.y1 < seed.y1 &&
@@ -215,20 +229,15 @@ export default {
     pause(bool) {
       this.isPaused = bool
     },
-    createCanvas() {
-      // method should run after mounted!
-      let canvas = document.getElementById('canvas')
-      canvas.width = this.viewPortWidth
-      canvas.height = this.viewPortHeight
-      this.canvas = new Canvas(canvas)
-    },
+
     prepareToGame() {
-      this.createCanvas()
+      this.canvas = new Canvas('#canvas')
       this.createLetters()
       this.startShowLetters()
       this.startAnimation()
     },
   },
+
   mounted() {
     if (this.isPageLoaderHide) {
       this.prepareToGame()
@@ -236,19 +245,18 @@ export default {
   },
   destroyed() {
     clearInterval(intervalLetters)
-    clearInterval(intervalSeed)
-    clearInterval(intervalBullets)
     audioBit.destroy()
   },
 }
 </script>
 
 <style lang="scss">
+@import '../../styles/props';
+
 .canvas-letters {
   & .letters {
     width: 100%;
     position: absolute;
-    left: 0;
     z-index: 1;
     color: #fff;
     font-size: 1.4em;
@@ -265,7 +273,7 @@ export default {
   }
 }
 
-@media (max-width: 481px) {
+@media (max-width: $mq-phone) {
   .canvas-letters {
     & .letters {
       width: 100%;
@@ -275,10 +283,4 @@ export default {
     }
   }
 }
-
-//@media (min-width:481px)  { /* portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. */ }
-//@media (min-width:641px)  { /* portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones */ }
-//@media (min-width:961px)  { /* tablet, landscape iPad, lo-res laptops ands desktops */ }
-//@media (min-width:1025px) { /* big landscape tablets, laptops, and desktops */ }
-//@media (min-width:1281px) { /* hi-res laptops and desktops */ }
 </style>

@@ -1,19 +1,19 @@
 <template>
-  <UI_IconArrow
+  <UIIconArrow
     class="page-control"
     :direction="direction"
     :text="text"
     :fadeOut="fadeOut"
-  ></UI_IconArrow>
+  ></UIIconArrow>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import UI_IconArrow from './UI/_IconArrow.vue'
+import UIIconArrow from './UI/IconArrow.vue'
 
 export default {
   name: 'pageControl',
-  components: { UI_IconArrow },
+  components: { UIIconArrow },
   props: {
     direction: { type: String, default: 'right' },
     text: { type: String, default: 'PageName' },

@@ -8,16 +8,15 @@
     <CanvasLetters
       :isDebug="isDebug"
       :barrier="barrier"
-      :shot="shot"
-      :shooter="shooter"
-      @canvas-letters-damage="getDamage"
+      :shooter="shooterPosition"
+      @canvas-letters-damage="increaseDamage"
     />
     <ButtonPlay
       @button-play--mounted="setBarrier"
       @button-play--restart="restartGame"
     />
-    <StatusBar :time="time" :damage="damage" />
-    <RobotShooter :shooter="shooter" :damage="damage" ref="robotShooter" />
+    <StatusBar />
+    <RobotShooter :position="shooterPosition" ref="robotShooter" />
     <ScoreBoard />
   </div>
 </template>
@@ -32,6 +31,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import Audio from '../abstractions/Audio'
 import shootMp3 from '../../static/media/shoot.mp3'
 import backgroundGame from '../../static/media/backgroundGame.mp3'
+
 const audioShot = new Audio(shootMp3, 0.3)
 const audioBg = new Audio(backgroundGame, 0.5, true)
 
@@ -47,17 +47,13 @@ export default {
   data() {
     return {
       barrier: null,
-      isDebug: true,
-      time: 500,
-      shooter: {},
-      shot: 0,
+      isDebug: false,
+      shooterPosition: {},
       mainGameKey: 0,
-      damage: 0,
-      soundDamage: {},
     }
   },
   computed: {
-    ...mapGetters(['isGameFinished', 'isGameReady']),
+    ...mapGetters(['isGameFinished', 'isGameReady', 'shots', 'damage']),
   },
   watch: {
     isGameReady() {
@@ -68,7 +64,13 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setIsGameStart', 'resetStateGame', 'setIsGameFinished']),
+    ...mapMutations([
+      'setIsGameStart',
+      'resetStateGame',
+      'setIsGameFinished',
+      'increaseShoots',
+      'increaseDamage',
+    ]),
 
     forceUpdateComponent() {
       this.mainGameKey += 1
@@ -85,21 +87,30 @@ export default {
     makeShot() {
       if (!this.isGameReady || this.isGameFinished) return
       this.setIsGameStart(true)
-      this.shot += 1
+      this.increaseShoots()
       audioShot.replay()
     },
     moveShooter(ev) {
       if (!this.$refs.robotShooter) return
-      let shooterEl = this.$refs.robotShooter.$el
-      this.shooter = {
+      const shooterEl = this.$refs.robotShooter.$el
+      this.shooterPosition = {
         x1: ev.clientX,
         y1: shooterEl.getBoundingClientRect().top,
         x2: ev.clientX + shooterEl.offsetWidth,
       }
     },
-    getDamage() {
-      this.damage += 1
+    restartGameByResizeBody() {
+      let timeId
+      window.addEventListener('resize', () => {
+        clearTimeout(timeId)
+        timeId = setTimeout(() => {
+          this.restartGame()
+        }, 300)
+      })
     },
+  },
+  mounted() {
+    this.restartGameByResizeBody()
   },
   destroyed() {
     this.restartGame()
