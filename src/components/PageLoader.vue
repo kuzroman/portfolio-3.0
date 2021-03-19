@@ -66,7 +66,7 @@ export default {
   width: 100%;
   height: 100%;
   position: absolute;
-  background: $bg-5;
+  background: $color-6;
   z-index: $zIndex-4;
   transform: translateY(0);
   transition: transform 0.3s, opacity 0.6s;
@@ -117,7 +117,7 @@ export default {
     height: $size;
     position: absolute;
     content: '';
-    background: $bg-5;
+    background: $color-6;
     top: -1px;
   }
   .loader:before {
@@ -165,7 +165,7 @@ export default {
     top: calc(50% - 36px);
     left: calc(50% - 32px);
     font-size: 3em;
-    color: $bg-9;
+    color: $color-10;
   }
 }
 </style>

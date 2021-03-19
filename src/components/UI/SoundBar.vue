@@ -27,7 +27,7 @@ export default {
 
   & i {
     width: 2px;
-    background: $bg-1;
+    background: $color-3;
     position: absolute;
   }
 

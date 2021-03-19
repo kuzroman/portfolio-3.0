@@ -44,7 +44,7 @@ export default {
     width: 42px;
     height: 2px;
     margin: 8px;
-    background-color: $bg-1;
+    background-color: $color-3;
 
     &:nth-child(n) {
       transition: transform 0.45s cubic-bezier(0.43, 0.77, 0.15, 1.5),

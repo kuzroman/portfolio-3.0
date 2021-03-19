@@ -3,26 +3,28 @@
     <h3>{{ score }} points</h3>
     <div class="hooray">Hooray!</div>
     <!-- <p>You've just beaten your own highscore 🎉🎉🎉</p> -->
-    <div class="result">
-      <div>Time left</div>
-      <div>{{ timeLeft }}</div>
-    </div>
-    <div class="result">
-      <div>Shots</div>
-      <div>{{ shots }}</div>
-    </div>
-    <div class="result">
-      <div>Goals</div>
-      <div>{{ killedLetters }}</div>
-    </div>
-    <div class="result">
-      <div>Life</div>
-      <div>{{ 100 - damage }}</div>
-    </div>
-    <div class="result best">
-      <div>Your best score</div>
-      <div>{{ score }}</div>
-    </div>
+    <DashedList>
+      <div class="result">
+        <div>Time left</div>
+        <div>{{ timeLeft }}</div>
+      </div>
+      <div class="result">
+        <div>Shots</div>
+        <div>{{ shots }}</div>
+      </div>
+      <div class="result">
+        <div>Goals</div>
+        <div>{{ killedLetters }}</div>
+      </div>
+      <div class="result">
+        <div>Life</div>
+        <div>{{ 100 - damage }}</div>
+      </div>
+      <div class="result best">
+        <div>Your best score</div>
+        <div>{{ score }}</div>
+      </div>
+    </DashedList>
 
     <UIButton text="show leaderboard" class="btn-leaderboard" />
   </div>
@@ -31,10 +33,11 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import UIButton from '../UI/Button.vue'
+import DashedList from '../UI/DashedList.vue'
 
 export default {
   name: 'ScoreBoard',
-  components: { UIButton },
+  components: { UIButton, DashedList },
 
   data() {
     return {
@@ -83,7 +86,7 @@ export default {
   max-width: 460px;
   width: 90%;
   margin: 0 auto;
-  background-color: $bg-5;
+  background-color: $color-6;
   box-shadow: 8px 8px 0 rgba(15, 15, 15, 0.45);
   padding: 24px 16px 26px;
 
@@ -104,7 +107,7 @@ export default {
     margin-bottom: 6px;
     font-weight: 800;
     letter-spacing: -1px;
-    color: $bg-11;
+    color: $color-12;
     text-align: center;
   }
 
@@ -115,34 +118,8 @@ export default {
     margin: 0.8em;
   }
 
-  .result {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    position: relative;
-
-    &:before {
-      width: 100%;
-      height: 50%;
-      content: '';
-      display: block;
-      position: absolute;
-      border-bottom: 1px dashed $bg-9;
-    }
-
-    > div {
-      background: $bg-5;
-      position: relative;
-      padding: 0 1em;
-    }
-
-    &.best {
-      color: $bg-3;
-    }
-  }
-
   .btn-leaderboard {
-    background: $bg-9;
+    background: $color-10;
     margin: 2em 9em;
   }
 }

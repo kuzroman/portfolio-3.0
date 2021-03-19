@@ -35,7 +35,7 @@ export default {
   width: 100%;
   height: 100%;
   z-index: $zIndex-3;
-  background: $bg-6;
+  background: $color-7;
   transform: translateY(-100%);
   transition: transform 0.4s;
 
@@ -76,7 +76,7 @@ export default {
 
       &:before,
       &:after {
-        background: $bg-7;
+        background: $color-8;
         content: '';
         width: 100%;
         position: absolute;

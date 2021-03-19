@@ -27,11 +27,11 @@ export default {
 .ui-loader-line {
   width: 18em;
   height: 1.6em;
-  background: $bg-2;
+  background: $color-4;
 
   .loader {
     height: 100%;
-    background: $bg-10;
+    background: $color-11;
   }
 }
 </style>

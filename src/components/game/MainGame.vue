@@ -18,6 +18,7 @@
     <StatusBar />
     <RobotShooter :position="shooterPosition" ref="robotShooter" />
     <ScoreBoard />
+    <LeaderBoard />
   </div>
 </template>
 
@@ -27,6 +28,7 @@ import StatusBar from './StatusBar.vue'
 import RobotShooter from './RobotShooter.vue'
 import CanvasLetters from './CanvasLetters.vue'
 import ScoreBoard from './ScoreBoard.vue'
+import LeaderBoard from './LeaderBoard.vue'
 import { mapGetters, mapMutations } from 'vuex'
 import Audio from '../abstractions/Audio'
 import shootMp3 from '../../static/media/shoot.mp3'
@@ -43,6 +45,7 @@ export default {
     RobotShooter,
     CanvasLetters,
     ScoreBoard,
+    LeaderBoard,
   },
   data() {
     return {

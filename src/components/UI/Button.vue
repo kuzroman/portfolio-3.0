@@ -23,9 +23,9 @@ export default {
 @import './_props.scss';
 
 .ui-button {
-  background: $bg-2;
+  background: $color-4;
   padding: 8px;
-  color: $bg-4;
+  color: $color-5;
   text-align: center;
   font-weight: bold;
   border-radius: 2px;

@@ -111,7 +111,7 @@ export default {
   }
 
   .score {
-    color: $bg-9;
+    color: $color-10;
     font-size: 1.2em;
     line-height: 1.4em;
     font-weight: bold;
@@ -120,7 +120,7 @@ export default {
   }
 
   .time {
-    color: $bg-9;
+    color: $color-10;
     font-size: 1.2em;
     line-height: 1.4em;
     font-weight: bold;

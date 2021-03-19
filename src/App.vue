@@ -126,7 +126,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: $bg-8;
+    background: $color-9;
     position: absolute;
   }
 

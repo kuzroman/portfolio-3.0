@@ -67,7 +67,7 @@ $iconSize: 36px;
     transition: opacity 0.1s ease 0.125s,
       right 0.3s cubic-bezier(0, 0, 0, 1) 0.125s,
       left 0.3s cubic-bezier(0, 0, 0, 1) 0.125s;
-    color: $bg-9;
+    color: $color-10;
     font-weight: bold;
   }
   &.active {
