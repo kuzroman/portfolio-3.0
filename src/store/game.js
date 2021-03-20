@@ -10,6 +10,8 @@ const defaultTimeLeft = 30
 // Vue.set(state.letters, letter.id, letter)
 
 export default {
+  namespaced: true,
+
   state: () => ({
     isSeedsFall: defaultIsSeedsFall,
     isGameReady: defaultIsGameReady,

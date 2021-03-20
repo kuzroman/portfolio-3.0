@@ -1,6 +1,8 @@
 import router from '../router'
 
 export default {
+  namespaced: true,
+
   state: () => ({
     isSiteFirstLoaded: true,
     isMenuNavigationOpened: false,
@@ -27,25 +29,24 @@ export default {
     setHidePageControl(state, bool) {
       state.hidePageControl = bool
     },
-    findSetTransitionDirection(state, { route, direction }) {
-      if (direction) {
-        state.transitionDirection = direction
-        return
-      }
-
+    findDirection(state, route) {
       const { routes } = router.options
       const currentIndex = routes.findIndex(
         (x) => x.name === router.currentRoute.name
       )
       const goToIndex = routes.findIndex((x) => x.name === route.name)
-      state.transitionDirection =
-        currentIndex < goToIndex ? 'to-right' : 'to-left'
+      return currentIndex < goToIndex ? 'to-right' : 'to-left'
+    },
+    setDirection(state, direction) {
+      state.transitionDirection = direction
     },
     toPage(store, { route, direction }) {
       this.commit('setIsMenuNavigation', false)
       this.commit('setHidePageControl', true)
-
-      this.commit('findSetTransitionDirection', { route, direction })
+      this.commit(
+        'setDirection',
+        direction || this.commit('findDirection', route)
+      )
       setTimeout(() => router.push(route), 600)
       setTimeout(() => this.commit('setHidePageControl', false), 900)
     },

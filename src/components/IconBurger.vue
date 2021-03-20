@@ -14,10 +14,10 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(['isMenuNavigationOpened']),
+    ...mapGetters('app', ['isMenuNavigationOpened']),
   },
   methods: {
-    ...mapMutations(['setIsMenuNavigation']),
+    ...mapMutations('app', ['setIsMenuNavigation']),
 
     switchMenu() {
       this.setIsMenuNavigation(!this.isMenuNavigationOpened)

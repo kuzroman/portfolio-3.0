@@ -22,7 +22,8 @@ export default {
     return {}
   },
   computed: {
-    ...mapGetters(['hidePageControl', 'isGameReady']),
+    ...mapGetters('app', ['hidePageControl']),
+    ...mapGetters('game', ['isGameReady']),
 
     fadeOut() {
       return this.hidePageControl || this.isGameReady

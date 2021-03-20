@@ -4,7 +4,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import damageMp3 from '../../static/media/damage.mp3'
+import damageMp3 from '../../assets/media/damage.mp3'
 import Audio from '../abstractions/Audio'
 const audioDamage = new Audio(damageMp3, 0.3)
 
@@ -25,7 +25,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['isGameReady', 'isGameFinished', 'damage']),
+    ...mapGetters('game', ['isGameReady', 'isGameFinished', 'damage']),
 
     left() {
       return { left: this.position.x1 + 'px' }
@@ -57,7 +57,7 @@ export default {
   height: 150px;
   position: absolute;
   bottom: 0;
-  background: url('../../static/img/game/robot.png') no-repeat;
+  background: url('../../assets/img/game/robot.png') no-repeat;
   transform: translateY(10em);
   opacity: 0;
   transition: transform 0.3s, opacity 0.3s;

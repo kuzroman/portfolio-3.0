@@ -15,14 +15,14 @@ export default {
   name: 'MenuNavigation',
   props: {},
   computed: {
-    ...mapGetters(['isMenuNavigationOpened']),
+    ...mapGetters('app', ['isMenuNavigationOpened']),
 
     routes() {
       return this.$router.options.routes
     },
   },
   methods: {
-    ...mapMutations(['toPage']),
+    ...mapMutations('app', ['toPage']),
   },
 }
 </script>

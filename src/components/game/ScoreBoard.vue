@@ -50,7 +50,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('game', [
       'isGameFinished',
       'timeLeft',
       'damage',
@@ -74,7 +74,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setScore']),
+    ...mapMutations('game', ['setScore']),
   },
 }
 </script>

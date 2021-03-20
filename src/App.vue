@@ -38,12 +38,12 @@ export default {
   components: { PageLoader, IconBurger, MenuNavigation, PageControl, SoundBar },
 
   computed: {
-    ...mapGetters([
+    ...mapGetters('app', [
       'transitionDirection',
       'isSiteFirstLoaded',
       'isPageLoaderHide',
-      'isGameReady',
     ]),
+    ...mapGetters('game', ['isGameReady']),
 
     routes() {
       return this.$router.options.routes
@@ -75,7 +75,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['toPage', 'setIsSiteFirstLoaded']),
+    ...mapMutations('app', ['toPage', 'setIsSiteFirstLoaded']),
   },
 }
 </script>

@@ -31,8 +31,8 @@ import ScoreBoard from './ScoreBoard.vue'
 import LeaderBoard from './LeaderBoard.vue'
 import { mapGetters, mapMutations } from 'vuex'
 import Audio from '../abstractions/Audio'
-import shootMp3 from '../../static/media/shoot.mp3'
-import backgroundGame from '../../static/media/backgroundGame.mp3'
+import shootMp3 from '../../assets/media/shoot.mp3'
+import backgroundGame from '../../assets/media/backgroundGame.mp3'
 
 const audioShot = new Audio(shootMp3, 0.3)
 const audioBg = new Audio(backgroundGame, 0.5, true)
@@ -56,7 +56,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isGameFinished', 'isGameReady', 'shots', 'damage']),
+    ...mapGetters('game', ['isGameFinished', 'isGameReady', 'shots', 'damage']),
   },
   watch: {
     isGameReady() {
@@ -67,7 +67,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations([
+    ...mapMutations('game', [
       'setIsGameStart',
       'resetStateGame',
       'setIsGameFinished',

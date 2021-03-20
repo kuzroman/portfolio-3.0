@@ -39,7 +39,7 @@ import Letter from './abstractions/Letter'
 import DebugInput from './DebugInput.vue'
 import LetterTag from './LetterTag.vue'
 import Audio from '../abstractions/Audio'
-import bitMp3 from '../../static/media/explode.mp3'
+import bitMp3 from '../../assets/media/explode.mp3'
 
 const audioBit = new Audio(bitMp3, 0.3)
 let intervalLetters, animationId
@@ -70,7 +70,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isPageLoaderHide', 'shots']),
+    ...mapGetters('app', ['isPageLoaderHide']),
+    ...mapGetters('game', ['shots']),
 
     description() {
       return this.isDebug
@@ -107,7 +108,11 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setIsSeedsFall', 'setIsGameFinished', 'setLetters']),
+    ...mapMutations('game', [
+      'setIsSeedsFall',
+      'setIsGameFinished',
+      'setLetters',
+    ]),
 
     createLetters() {
       this.letters = Array.from(

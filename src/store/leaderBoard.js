@@ -7,6 +7,8 @@ const getLeadersApi = 'http://localhost:3000/leaderBoards'
 // const addLeadersApi = ''
 
 export default {
+  namespaced: true,
+
   state: () => ({
     leaders: [],
   }),

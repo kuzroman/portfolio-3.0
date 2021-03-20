@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import MainGame from '../game/MainGame.vue'
+import MainGame from '../components/game/MainGame.vue'
 
 export default {
   name: 'PageGame',

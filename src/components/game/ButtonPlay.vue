@@ -28,7 +28,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isSeedsFall', 'isGameReady', 'isGameFinished']),
+    ...mapGetters('game', ['isSeedsFall', 'isGameReady', 'isGameFinished']),
 
     text() {
       return this.isGameFinished
@@ -48,7 +48,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setIsGameReady']),
+    ...mapMutations('game', ['setIsGameReady']),
 
     handleClick() {
       if (this.isSeedsFall) return

@@ -43,7 +43,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('game', [
       'isGameReady',
       'isGameStart',
       'isGameFinished',
@@ -56,7 +56,11 @@ export default {
     ]),
   },
   methods: {
-    ...mapMutations(['setIsGameFinished', 'setScore', 'decreaseTimeLeft']),
+    ...mapMutations('game', [
+      'setIsGameFinished',
+      'setScore',
+      'decreaseTimeLeft',
+    ]),
 
     runTimer() {
       intervalTime = setInterval(() => {

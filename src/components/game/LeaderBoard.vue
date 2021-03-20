@@ -47,14 +47,14 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['leaders']),
+    ...mapGetters('leaderBoard', ['leaders']),
 
     getTop10() {
       return this.leaders.sort((a, b) => b.score - a.score).slice(0, 10)
     },
   },
   methods: {
-    ...mapActions(['getLeaders']),
+    ...mapActions('leaderBoard', ['getLeaders']),
 
     saveResult() {},
 

@@ -33,7 +33,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setIsPageLoaderHide']),
+    ...mapMutations('app', ['setIsPageLoaderHide']),
 
     runAnimations() {
       Object.keys(this.animation).map((key, i) => {
