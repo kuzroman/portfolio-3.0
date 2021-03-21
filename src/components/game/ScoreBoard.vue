@@ -14,7 +14,7 @@
       </div>
       <div class="result">
         <div>Goals</div>
-        <div>{{ killedLetters }}</div>
+        <div>{{ killedLetters.length }}</div>
       </div>
       <div class="result">
         <div>Life</div>
@@ -41,7 +41,7 @@ export default {
 
   data() {
     return {
-      isDebug: true,
+      isDebug: false,
     }
   },
   watch: {
@@ -62,12 +62,13 @@ export default {
     ]),
 
     score() {
-      let aliveLettersInner = this.aliveLetters
-      if (!this.killedLetters) return 0
+      let aliveLettersInner = this.aliveLetters.length
+      if (!this.killedLetters.length) return 0
       if (!aliveLettersInner) aliveLettersInner = 1
 
       const mainScore = Math.ceil(
-        (this.killedLetters * 10000) / (this.aliveLetters + this.shots)
+        (this.killedLetters.length * 10000) /
+          (this.aliveLetters.length + this.shots)
       )
       const bonus = this.timeLeft * 10 - this.damage * 5
       return mainScore + bonus
@@ -80,7 +81,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/props.scss';
+@import '../../assets/styles/props.scss';
 
 .score-board {
   max-width: 460px;

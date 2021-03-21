@@ -1,7 +1,7 @@
 <template>
   <div class="status-bar" :class="{ active: isGameReady }">
     <div class="status-bar--top">
-      <div class="score">{{ killedLetters }} killed</div>
+      <div class="score">{{ killedLetters.length }} killed</div>
       <div class="status-bar--right">
         <IconTime />
         <IconShield />
@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/props.scss';
+@import '../../assets/styles/props.scss';
 
 .status-bar {
   position: absolute;

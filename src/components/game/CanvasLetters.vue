@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { mapGetters, mapMutations } from 'vuex'
 import Canvas from './abstractions/Canvas'
 import Seed from './abstractions/Seed'
@@ -38,10 +37,10 @@ import Bullet from './abstractions/Bullet'
 import Letter from './abstractions/Letter'
 import DebugInput from './DebugInput.vue'
 import LetterTag from './LetterTag.vue'
-import Audio from '../abstractions/Audio'
+import CustomAudio from '../abstractions/Audio'
 import bitMp3 from '../../assets/media/explode.mp3'
 
-const audioBit = new Audio(bitMp3, 0.3)
+const audioBit = new CustomAudio(bitMp3, 0.3)
 let intervalLetters, animationId
 
 export default {
@@ -59,7 +58,6 @@ export default {
 
   data() {
     return {
-      letters: [],
       seeds: [],
       bullets: [],
       numSeedsForOneLetter: 3,
@@ -71,7 +69,7 @@ export default {
 
   computed: {
     ...mapGetters('app', ['isPageLoaderHide']),
-    ...mapGetters('game', ['shots']),
+    ...mapGetters('game', ['shots', 'letters', 'aliveLetters']),
 
     description() {
       return this.isDebug
@@ -102,27 +100,23 @@ export default {
       this.bullets.push(bullet)
       this.startAnimation()
     },
-
-    letters(letters) {
-      this.setLetters(letters)
-    },
   },
   methods: {
     ...mapMutations('game', [
       'setIsSeedsFall',
       'setIsGameFinished',
       'setLetters',
+      'updateLetters',
+      'showLetter',
+      'killLetter',
     ]),
 
     createLetters() {
-      this.letters = Array.from(
+      const letters = Array.from(
         this.description,
         (letter, i) => new Letter(letter, i)
       )
-    },
-
-    updateState(letter) {
-      Vue.set(this.letters, letter.id, letter)
+      this.setLetters(letters)
     },
 
     startShowLetters() {
@@ -131,8 +125,10 @@ export default {
       intervalLetters = setInterval(() => {
         if (i <= this.letters.length - 1) {
           letter = this.letters[i]
-          letter.isShow = true
-          Vue.set(this.letters, i, letter)
+          // letter.isShow = true
+          this.showLetter(letter)
+          // Vue.set(this.letters, i, letter)
+          this.updateLetters(letter)
         } else {
           clearInterval(intervalLetters)
         }
@@ -143,10 +139,7 @@ export default {
     // data has position XY from LetterTag
     letterShowed(data) {
       let letter = this.letters[data.id]
-
-      letter.setPosition(data)
-      this.updateState(letter)
-
+      this.updateLetters({ ...letter, ...data })
       this.addSeed(data)
     },
 
@@ -192,9 +185,8 @@ export default {
     updateBullets() {
       this.bullets = this.bullets.filter((bullet) => {
         bullet.update()
-        let aliveLetters = Letter.getLifeLetters(this.letters)
-        if (aliveLetters.length) {
-          this.checkGoals(bullet, aliveLetters)
+        if (this.aliveLetters.length) {
+          this.checkGoals(bullet, this.aliveLetters)
         } else {
           this.setIsGameFinished(true)
         }
@@ -213,7 +205,7 @@ export default {
             (bullet.x1 < letter.x2 && letter.x2 < bullet.x2) ||
             (letter.x1 < bullet.x1 && bullet.x2 < letter.x2))
         ) {
-          letter.kill()
+          this.killLetter(letter)
           this.addSeed({ x1: bullet.x1, y1: bullet.y1 }, 'shrapnel')
           audioBit.replay()
         }
@@ -256,7 +248,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/props';
+@import '../../assets/styles/props';
 
 .canvas-letters {
   & .letters {

@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const defaultIsSeedsFall = false
 const defaultIsGameReady = false
 const defaultIsGameStart = false
@@ -32,9 +34,9 @@ export default {
     score: (state) => state.score,
     letters: (state) => state.letters,
     killedLetters: (state) =>
-      state.letters.filter((x) => x.isKilled && !x.isService).length,
+      state.letters.filter((x) => x.isKilled && !x.isService),
     aliveLetters: (state) =>
-      state.letters.filter((x) => !x.isKilled && !x.isService).length,
+      state.letters.filter((x) => !x.isKilled && !x.isService),
     shots: (state) => state.shots,
     damage: (state) => state.damage,
     timeLeft: (state) => state.timeLeft,
@@ -67,8 +69,17 @@ export default {
     setScore(state, num) {
       state.score = num
     },
+    showLetter(state, letters) {
+      state.letters[letters.id].isShow = true
+    },
+    killLetter(state, letters) {
+      state.letters[letters.id].isKilled = true
+    },
     setLetters(state, collection) {
       state.letters = collection
+    },
+    updateLetters(state, letter) {
+      Vue.set(state.letters, letter.id, letter)
     },
     increaseShoots(state) {
       state.shots += 1

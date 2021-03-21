@@ -14,6 +14,8 @@ export default {
   }),
   getters: {
     leaders: (state) => state.leaders,
+    getSortLeaders: (state) =>
+      [...state.leaders].sort((a, b) => b.score - a.score),
   },
   mutations: {
     addLeader(state, leader) {

@@ -43,14 +43,14 @@ export default {
     return {
       yourScore: 1000,
       playerName: '',
-      state: 'active',
+      state: '', // 'active',
     }
   },
   computed: {
-    ...mapGetters('leaderBoard', ['leaders']),
+    ...mapGetters('leaderBoard', ['leaders', 'getSortLeaders']),
 
     getTop10() {
-      return this.leaders.sort((a, b) => b.score - a.score).slice(0, 10)
+      return this.getSortLeaders.slice(0, 10)
     },
   },
   methods: {
@@ -69,7 +69,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/props';
+@import '../../assets/styles/props';
 
 .leader-board {
   width: 100%;

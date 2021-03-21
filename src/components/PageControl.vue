@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../styles/index.scss';
+@import '../assets/styles/index.scss';
 
 .page-control {
   z-index: $zIndex-2;

@@ -9,8 +9,8 @@
 <script>
 import UiSoundBar from './UI/SoundBar.vue'
 import backgroundMusic from '../assets/media/backgroundSite.mp3'
-import Audio from './abstractions/Audio'
-const audioBG = new Audio(backgroundMusic)
+import CustomAudio from './abstractions/Audio'
+const audioBG = new CustomAudio(backgroundMusic)
 
 export default {
   name: 'SoundBar',

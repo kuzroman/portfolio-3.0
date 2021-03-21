@@ -79,7 +79,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import '../../styles/props.scss';
+@import '../../assets/styles/props.scss';
 
 .button-play {
   width: 14em;

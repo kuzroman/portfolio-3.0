@@ -41,14 +41,14 @@ export default {
       state.transitionDirection = direction
     },
     toPage(store, { route, direction }) {
-      this.commit('setIsMenuNavigation', false)
-      this.commit('setHidePageControl', true)
+      this.commit('app/setIsMenuNavigation', false)
+      this.commit('app/setHidePageControl', true)
       this.commit(
-        'setDirection',
-        direction || this.commit('findDirection', route)
+        'app/setDirection',
+        direction || this.commit('app/findDirection', route)
       )
       setTimeout(() => router.push(route), 600)
-      setTimeout(() => this.commit('setHidePageControl', false), 900)
+      setTimeout(() => this.commit('app/setHidePageControl', false), 900)
     },
     setIsPageLoaderHide(state, bool) {
       state.isPageLoaderHide = bool

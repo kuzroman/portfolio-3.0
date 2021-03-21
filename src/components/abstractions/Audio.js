@@ -1,7 +1,6 @@
-export default class Audio {
+export default class CustomAudio {
   constructor(media, volume = 1, loop = false) {
-    this.audio = document.createElement('audio')
-    this.audio.src = media
+    this.audio = new Audio(media)
     this.audio.volume = volume // 0 ?? volume
     this.audio.loop = loop
   }

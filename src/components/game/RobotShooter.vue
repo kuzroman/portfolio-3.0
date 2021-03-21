@@ -5,8 +5,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import damageMp3 from '../../assets/media/damage.mp3'
-import Audio from '../abstractions/Audio'
-const audioDamage = new Audio(damageMp3, 0.3)
+import CustomAudio from '../abstractions/Audio'
+const audioDamage = new CustomAudio(damageMp3, 0.3)
 
 export default {
   name: 'RobotShooter',
